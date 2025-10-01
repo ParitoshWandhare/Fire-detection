@@ -1,0 +1,33 @@
+# Fixed Model configuration for U-Net fire segmentation
+model:
+  name: "unet"
+  
+  # U-Net architecture - simplified and fixed
+  architecture: "unet"
+  backbone: "resnet34"
+  pretrained: true
+  in_channels: 3
+  num_classes: 1
+  
+  # Fixed decoder configuration - 4 blocks to match encoder
+  decoder_channels: [256, 128, 64, 32]  # Removed the 5th channel
+  dropout: 0.1  # Added moderate dropout
+  aux_outputs: true  # Keep auxiliary outputs for deep supervision
+  
+  # Model dimensions
+  input_size: [512, 512]
+  
+  # Inference parameters
+  inference:
+    tile_size: 512
+    tile_overlap: 64
+    batch_size: 4  # Reduced for stability
+    tta: false
+    
+  # Phase 2 preparation (ConvLSTM) - unchanged
+  future:
+    temporal_depth: 5
+    conv_lstm:
+      hidden_dim: 64
+      kernel_size: 3
+      num_layers: 2
