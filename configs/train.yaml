@@ -1,5 +1,5 @@
 # Fixed Training configuration - Conservative settings to prevent overfitting
-epochs: 60  # Reduced from 60 for initial testing
+epochs: 50 
 batch_size: 8  # Reduced from 16 for stability
 num_workers: 2  # Reduced from 4 to prevent data loader issues
 pin_memory: true

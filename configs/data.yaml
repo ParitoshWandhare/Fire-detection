@@ -13,7 +13,7 @@ data:
   
   # Image specifications
   image_format: "png" 
-  original_size: [3665, 2929]  # [height, width] in pixels
+  original_size: [3800, 3400]  # [height, width] in pixels
   
   # Coordinate Reference System
   crs: "EPSG:4326"  # WGS84 lat/lon
@@ -52,7 +52,7 @@ data:
     
     # Morphological operations for noise removal
     noise_removal:
-      enabled: true
+      enabled: false
       kernel_size: 3           # Size of morphological kernel
       min_component_area: 2    # Remove very small components
     
