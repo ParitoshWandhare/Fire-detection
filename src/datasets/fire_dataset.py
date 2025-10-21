@@ -395,14 +395,19 @@ class FireSegmentationDataset(FireDetectionDataset):
 def get_transforms(phase: str = 'train', image_size: int = 512,
                    augmentation_config: Optional[Dict] = None) -> A.Compose:
     """
-    Get data augmentation transforms for different phases.
-
-    This implementation is defensive about albumentations API differences:
-    - Tries GaussNoise then GaussianNoise, with var_limit if available
-    - Tries CoarseDropout with detailed params, falls back to simple call
+    Enhanced data augmentation transforms - optimized for fire detection.
+    
+    Args:
+        phase: 'train', 'val', or 'test'
+        image_size: Target image size
+        augmentation_config: Augmentation configuration dict
+    
+    Returns:
+        Albumentations composition
     """
-    # default simple transforms for val/test or when augmentation disabled
+    
     def base_pipeline():
+        """Base transforms for validation/test."""
         return A.Compose([
             A.Resize(image_size, image_size),
             A.Normalize(
@@ -411,115 +416,229 @@ def get_transforms(phase: str = 'train', image_size: int = 512,
             ),
             ToTensorV2()
         ])
-
-    if phase == 'train' and augmentation_config and augmentation_config.get('enabled', True):
-        # safe extraction of augmentation parameters
-        h_flip_p = augmentation_config.get('horizontal_flip', 0.5)
-        v_flip_p = augmentation_config.get('vertical_flip', 0.5)
-        rot90_p = augmentation_config.get('rotation_90', 0.5)
-        brightness_contrast_p = augmentation_config.get('brightness_contrast', 0.3)
-        noise_p = augmentation_config.get('gaussian_noise', 0.2)
-        cutout_p = augmentation_config.get('cutout', 0.2)
-
-        brightness_limit = min(augmentation_config.get('brightness_limit', 0.2), 0.3)
-        contrast_limit = min(augmentation_config.get('contrast_limit', 0.2), 0.3)
-        noise_var_limit = augmentation_config.get('noise_var_limit', [0.0, 0.02])
-        cutout_holes = min(augmentation_config.get('cutout_holes', 8), 16)
-        cutout_size = min(augmentation_config.get('cutout_size', 32), 64)
-
-        # Build noise transform robustly (try a few options)
-        gauss_transform = None
-        gauss_err = None
+    
+    if phase != 'train' or not augmentation_config or not augmentation_config.get('enabled', True):
+        return base_pipeline()
+    
+    # Extract augmentation parameters
+    aug_prob = augmentation_config.get('probability', 0.85)
+    h_flip_p = augmentation_config.get('horizontal_flip', 0.5)
+    v_flip_p = augmentation_config.get('vertical_flip', 0.5)
+    rot90_p = augmentation_config.get('rotation_90', 0.5)
+    rand_rot_p = augmentation_config.get('random_rotation', 0.4)
+    brightness_contrast_p = augmentation_config.get('brightness_contrast', 0.4)
+    color_jitter_p = augmentation_config.get('color_jitter', 0.3)
+    noise_p = augmentation_config.get('gaussian_noise', 0.25)
+    blur_p = augmentation_config.get('gaussian_blur', 0.2)
+    cutout_p = augmentation_config.get('cutout', 0.15)
+    elastic_p = augmentation_config.get('elastic_transform', 0.15)
+    
+    # Augmentation limits
+    rot_limit = augmentation_config.get('rotation_limit', 20)
+    brightness_limit = augmentation_config.get('brightness_limit', 0.25)
+    contrast_limit = augmentation_config.get('contrast_limit', 0.25)
+    hue_limit = augmentation_config.get('hue_shift_limit', 15)
+    sat_limit = augmentation_config.get('sat_shift_limit', 20)
+    noise_var_limit = augmentation_config.get('noise_var_limit', [0.0, 0.03])
+    blur_limit = augmentation_config.get('blur_limit', [3, 5])
+    cutout_holes = augmentation_config.get('cutout_holes', 6)
+    cutout_size = augmentation_config.get('cutout_size', 32)
+    
+    # Elastic transform params
+    elastic_alpha = augmentation_config.get('alpha', 120)
+    elastic_sigma = augmentation_config.get('sigma', 12)
+    elastic_alpha_affine = augmentation_config.get('alpha_affine', 12)
+    
+    # Build augmentation pipeline
+    aug_list = [
+        A.Resize(image_size, image_size),
+        
+        # Basic flips and rotations - important for fire detection
+        A.HorizontalFlip(p=h_flip_p),
+        A.VerticalFlip(p=v_flip_p),
+        A.RandomRotate90(p=rot90_p),
+    ]
+    
+    # Random smooth rotation if enabled
+    if rand_rot_p > 0:
         try:
-            # preferred: GaussNoise(var_limit=..., p=1.0)
-            gauss_transform = A.GaussNoise(var_limit=tuple(noise_var_limit), p=1.0)
-        except Exception as e:
-            gauss_err = e
-            try:
-                # alternative name
-                gauss_transform = A.GaussianNoise(var_limit=tuple(noise_var_limit), p=1.0)
-            except Exception:
-                # fallback: use GaussNoise without var_limit (if available), else skip
-                if hasattr(A, 'GaussNoise'):
-                    try:
-                        gauss_transform = A.GaussNoise(p=1.0)
-                    except Exception:
-                        gauss_transform = None
-                elif hasattr(A, 'GaussianNoise'):
-                    try:
-                        gauss_transform = A.GaussianNoise(p=1.0)
-                    except Exception:
-                        gauss_transform = None
-                else:
-                    gauss_transform = None
-
-        if gauss_transform is None:
-            # If noise transform can't be constructed, log a warning and fall back to multiplicative noise only
-            warnings.warn(f"Gauss/Gaussian noise could not be constructed (error: {gauss_err}). Falling back to MultiplicativeNoise.")
-
-        # Build coarse dropout robustly
-        dropout_transform = None
-        dropout_err = None
-        try:
-            dropout_transform = A.CoarseDropout(
-                max_holes=cutout_holes,
-                max_height=cutout_size,
-                max_width=cutout_size,
-                min_holes=1,
-                min_height=8,
-                min_width=8,
-                fill_value=0,
-                p=cutout_p
+            aug_list.append(
+                A.Rotate(limit=rot_limit, p=rand_rot_p, border_mode=0)
             )
         except Exception as e:
-            dropout_err = e
+            warnings.warn(f"Could not add Rotate augmentation: {e}")
+    
+    # Color/brightness augmentations - crucial for fire detection
+    color_augs = []
+    
+    try:
+        color_augs.append(
+            A.RandomBrightnessContrast(
+                brightness_limit=brightness_limit,
+                contrast_limit=contrast_limit,
+                p=1.0
+            )
+        )
+    except Exception:
+        pass
+    
+    try:
+        color_augs.append(
+            A.HueSaturationValue(
+                hue_shift_limit=hue_limit,
+                sat_shift_limit=sat_limit,
+                val_shift_limit=15,
+                p=1.0
+            )
+        )
+    except Exception:
+        pass
+    
+    try:
+        color_augs.append(A.CLAHE(clip_limit=2.0, p=1.0))
+    except Exception:
+        pass
+    
+    try:
+        color_augs.append(
+            A.ColorJitter(
+                brightness=0.2,
+                contrast=0.2,
+                saturation=0.2,
+                hue=0.1,
+                p=1.0
+            )
+        )
+    except Exception:
+        pass
+    
+    if color_augs:
+        aug_list.append(A.OneOf(color_augs, p=brightness_contrast_p))
+    
+    # Noise augmentations
+    noise_augs = []
+    
+    # Try GaussNoise with var_limit
+    try:
+        noise_augs.append(A.GaussNoise(var_limit=tuple(noise_var_limit), p=1.0))
+    except Exception:
+        try:
+            noise_augs.append(A.GaussianNoise(var_limit=tuple(noise_var_limit), p=1.0))
+        except Exception:
             try:
-                # Fallback to minimal argument set
-                dropout_transform = A.CoarseDropout(max_holes=cutout_holes, max_height=cutout_size, max_width=cutout_size, p=cutout_p)
+                noise_augs.append(A.GaussNoise(p=1.0))
             except Exception:
-                # final fallback: single-arg constructor
-                try:
-                    dropout_transform = A.CoarseDropout(p=cutout_p)
-                except Exception:
-                    dropout_transform = None
-
-        if dropout_transform is None:
-            warnings.warn(f"CoarseDropout could not be constructed cleanly (error: {dropout_err}). Skipping cutout augmentation.")
-
-        # Compose augmentation list
-        aug_list = [
-            A.Resize(image_size, image_size),
-            A.HorizontalFlip(p=h_flip_p),
-            A.VerticalFlip(p=v_flip_p),
-            A.RandomRotate90(p=rot90_p),
-            A.OneOf([
-                A.RandomBrightnessContrast(brightness_limit=brightness_limit, contrast_limit=contrast_limit, p=1.0),
-                A.HueSaturationValue(hue_shift_limit=10, sat_shift_limit=15, val_shift_limit=10, p=1.0),
-                A.CLAHE(p=1.0),
-            ], p=brightness_contrast_p),
-        ]
-
-        # include noise if available, else multiplicative noise (safe)
-        if gauss_transform is not None:
-            aug_list.append(A.OneOf([gauss_transform, A.MultiplicativeNoise(multiplier=[0.95, 1.05], p=1.0)], p=noise_p))
-        else:
-            aug_list.append(A.OneOf([A.MultiplicativeNoise(multiplier=[0.95, 1.05], p=1.0)], p=noise_p))
-
-        # include dropout if available
-        if dropout_transform is not None:
-            aug_list.append(dropout_transform)
-
-        # normalization + tensor
-        aug_list.extend([
-            A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ToTensorV2()
-        ])
-
-        return A.Compose(aug_list)
-
-    else:
-        # val/test or augmentation disabled
-        return base_pipeline()
+                pass
+    
+    # Add multiplicative noise
+    try:
+        noise_augs.append(A.MultiplicativeNoise(multiplier=[0.9, 1.1], p=1.0))
+    except Exception:
+        pass
+    
+    # Add ISO noise (simulates camera sensor noise)
+    try:
+        noise_augs.append(A.ISONoise(color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=1.0))
+    except Exception:
+        pass
+    
+    if noise_augs:
+        aug_list.append(A.OneOf(noise_augs, p=noise_p))
+    
+    # Blur augmentations
+    if blur_p > 0:
+        blur_augs = []
+        
+        try:
+            blur_augs.append(A.GaussianBlur(blur_limit=blur_limit, p=1.0))
+        except Exception:
+            pass
+        
+        try:
+            blur_augs.append(A.MotionBlur(blur_limit=5, p=1.0))
+        except Exception:
+            pass
+        
+        try:
+            blur_augs.append(A.MedianBlur(blur_limit=5, p=1.0))
+        except Exception:
+            pass
+        
+        if blur_augs:
+            aug_list.append(A.OneOf(blur_augs, p=blur_p))
+    
+    # Cutout/dropout augmentation
+    if cutout_p > 0:
+        try:
+            aug_list.append(
+                A.CoarseDropout(
+                    max_holes=cutout_holes,
+                    max_height=cutout_size,
+                    max_width=cutout_size,
+                    min_holes=1,
+                    min_height=8,
+                    min_width=8,
+                    fill_value=0,
+                    p=cutout_p
+                )
+            )
+        except Exception:
+            try:
+                aug_list.append(
+                    A.CoarseDropout(
+                        max_holes=cutout_holes,
+                        max_height=cutout_size,
+                        max_width=cutout_size,
+                        p=cutout_p
+                    )
+                )
+            except Exception as e:
+                warnings.warn(f"Could not add CoarseDropout: {e}")
+    
+    # Elastic transform for spatial robustness
+    if elastic_p > 0:
+        try:
+            aug_list.append(
+                A.ElasticTransform(
+                    alpha=elastic_alpha,
+                    sigma=elastic_sigma,
+                    alpha_affine=elastic_alpha_affine,
+                    p=elastic_p
+                )
+            )
+        except Exception as e:
+            warnings.warn(f"Could not add ElasticTransform: {e}")
+    
+    # Additional augmentations for robustness
+    try:
+        aug_list.append(A.RandomShadow(p=0.1))  # Simulate shadows
+    except Exception:
+        pass
+    
+    try:
+        aug_list.append(A.RandomFog(fog_coef_lower=0.1, fog_coef_upper=0.3, p=0.05))
+    except Exception:
+        pass
+    
+    # Grid distortion for spatial variation
+    try:
+        aug_list.append(A.GridDistortion(num_steps=5, distort_limit=0.3, p=0.1))
+    except Exception:
+        pass
+    
+    # Optical distortion
+    try:
+        aug_list.append(A.OpticalDistortion(distort_limit=0.5, shift_limit=0.5, p=0.1))
+    except Exception:
+        pass
+    
+    # Normalization and conversion to tensor
+    aug_list.extend([
+        A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ToTensorV2()
+    ])
+    
+    return A.Compose(aug_list)
 
 
 class FireDataModule:
@@ -798,43 +917,52 @@ def create_dataloader_from_config(config: Dict) -> Tuple[DataLoader, DataLoader,
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("Testing Fire Detection Dataset with Data Validation")
-    print("=" * 55)
-
-    # Test dataset creation
-    tiles_dir = "data/interim/tiles"
-
+    import numpy as np
+    
+    print("Testing optimized augmentation pipeline")
+    print("=" * 50)
+    
+    # Test config
+    aug_config = {
+        'enabled': True,
+        'probability': 0.85,
+        'horizontal_flip': 0.5,
+        'vertical_flip': 0.5,
+        'rotation_90': 0.5,
+        'random_rotation': 0.4,
+        'brightness_contrast': 0.4,
+        'color_jitter': 0.3,
+        'gaussian_noise': 0.25,
+        'gaussian_blur': 0.2,
+        'cutout': 0.15,
+        'elastic_transform': 0.15,
+        'rotation_limit': 20,
+        'brightness_limit': 0.25,
+        'contrast_limit': 0.25,
+        'hue_shift_limit': 15,
+        'sat_shift_limit': 20,
+        'noise_var_limit': [0.0, 0.03],
+        'blur_limit': [3, 5],
+        'cutout_holes': 6,
+        'cutout_size': 32,
+        'alpha': 120,
+        'sigma': 12,
+        'alpha_affine': 12
+    }
+    
+    # Create transform
+    transform = get_transforms('train', 512, aug_config)
+    
+    # Test on dummy data
+    dummy_image = np.random.randint(0, 255, (512, 512, 3), dtype=np.uint8)
+    dummy_mask = np.random.randint(0, 2, (512, 512), dtype=np.float32)
+    
     try:
-        # Create data module
-        data_module = FireDataModule(
-            tiles_dir=tiles_dir,
-            batch_size=8,
-            num_workers=2,
-            task='segmentation'
-        )
-
-        # Print statistics
-        print("Class distribution:")
-        print(json.dumps(data_module.get_class_distribution(), indent=2))
-
-        # Get dataloaders
-        train_loader = data_module.train_dataloader()
-        val_loader = data_module.val_dataloader()
-        test_loader = data_module.test_dataloader()
-
-        # Inspect one batch
-        print("\nInspecting one batch from train loader...")
-        for batch_idx, (images, masks) in enumerate(train_loader):
-            print(f"Batch {batch_idx}:")
-            print(f"  Images shape: {images.shape}")
-            print(f"  Masks shape: {masks.shape}")
-            print(f"  Image dtype: {images.dtype}, Mask dtype: {masks.dtype}")
-            if batch_idx == 0:
-                break
-
-        print("\nValidation loader size:", len(val_loader))
-        print("Test loader size:", len(test_loader))
-        print("✅ Dataset and dataloaders created successfully.")
-
+        result = transform(image=dummy_image, mask=dummy_mask)
+        print(f"✅ Transform successful!")
+        print(f"   Image shape: {result['image'].shape}")
+        print(f"   Mask shape: {result['mask'].shape}")
+        print(f"   Image dtype: {result['image'].dtype}")
+        print(f"   Mask dtype: {result['mask'].dtype}")
     except Exception as e:
-        print(f"❌ Error while testing dataset: {e}")
+        print(f"❌ Transform failed: {e}")

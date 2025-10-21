@@ -1,4 +1,4 @@
-# Data configuration for forest fire detection
+# Optimized Data Configuration - Target: F1 96%+, IoU 92%+
 data:
   # Raw data paths
   raw_data_dir: "data/raw"
@@ -13,63 +13,80 @@ data:
   
   # Image specifications
   image_format: "png" 
-  original_size: [3800, 3400]  # [height, width] in pixels
+  original_size: [3800, 3400]
   
   # Coordinate Reference System
-  crs: "EPSG:4326"  # WGS84 lat/lon
+  crs: "EPSG:4326"
   
-  # Tiling configuration
-  tile_size: 512  # pixels per tile
-  tile_overlap: 64  # pixels overlap between adjacent tiles
-  min_fire_pixels: 10  # minimum fire pixels per tile to include in training
+  # Optimized tiling configuration
+  tile_size: 512
+  tile_overlap: 96        # Increased from 64 for better context
+  min_fire_pixels: 5      # Reduced from 10 to include more fire samples
   
-  # Data splits
-  train_ratio: 0.7
-  val_ratio: 0.2
-  test_ratio: 0.1
+  # Data splits - slightly adjusted
+  train_ratio: 0.75       # Increased from 0.7 for more training data
+  val_ratio: 0.15         # Reduced from 0.2
+  test_ratio: 0.10        # Kept same
   
   # States/regions to process
-  states: ["Ontario", "Quebec", "Alberta", "BritishColumbia"]  # Add more states as needed
+  states: ["Ontario", "Quebec", "Alberta", "BritishColumbia"]
   
-  # Date range (YYYY-MM-DD format)
+  # Date range
   date_range:
     start: "2023-06-01"
     end: "2023-06-30"
     
-  # Fire detection parameters - optimized based on debug results
+  # Optimized fire detection parameters
   fire_detection:
-    method: "auto"  # Use automatic detection
-    # Parameters tested and validated with debug script
+    method: "auto"
     rgb_thresholds:
-      red_threshold: 120        # Lowered red threshold for better sensitivity
-      orange_ratio: 0.6         # High orange to red ratio  
-      brightness_threshold: 200 # Balanced brightness requirement
-      green_max: 160           # Allow moderate green (less strict than before)
-      blue_max: 140            # Allow moderate blue (less strict than before)
-      red_green_contrast: 25   # Moderate red-green difference
-      red_blue_contrast: 30    # Moderate red-blue difference
-      min_fire_area: 2         # Allow smaller fire regions
+      red_threshold: 110        # Slightly lower for sensitivity
+      orange_ratio: 0.55        # More permissive
+      brightness_threshold: 190  # Lower for edge cases
+      green_max: 170           # More permissive
+      blue_max: 150            # More permissive
+      red_green_contrast: 20   # Lower for sensitivity
+      red_blue_contrast: 25    # Lower for sensitivity
+      min_fire_area: 1         # Capture smaller fires
     
-    # Morphological operations for noise removal
+    # Morphological operations
     noise_removal:
-      enabled: false
-      kernel_size: 3           # Size of morphological kernel
-      min_component_area: 2    # Remove very small components
+      enabled: true           # Enable for cleaner masks
+      kernel_size: 3
+      min_component_area: 2
     
-  # Data augmentation (applied during tiling)
+  # Enhanced data augmentation for training
   augmentation:
     horizontal_flip: true
     vertical_flip: true
     rotation_90: true
+    random_rotation: true     # Added
+    color_jitter: true        # Added
+    elastic_transform: true   # Added
     
-  # Quality control thresholds - updated based on expected better detection
+  # Quality control - more permissive
   quality_control:
-    max_fire_ratio_per_tile: 0.30    # Allow up to 30% fire pixels per tile
-    expected_fire_tiles_ratio: 0.20  # Expect ~20% of tiles to contain fire (more realistic)
-    min_fire_brightness: 350         # Lower minimum brightness
+    max_fire_ratio_per_tile: 0.35    # Increased from 0.30
+    expected_fire_tiles_ratio: 0.25  # Increased from 0.20
+    min_fire_brightness: 300         # Lowered from 350
+    max_fire_brightness: 255         # Max possible
     
   # Performance monitoring
   monitoring:
     log_detection_stats: true
-    save_detection_samples: false    # Disabled for production
+    save_detection_samples: true     # Enable for debugging
     sample_output_dir: "data/interim/detection_samples"
+    sample_count: 20                 # Save more samples
+    
+  # Data loading optimization for 4GB GPU
+  loading:
+    prefetch_factor: 2
+    persistent_workers: true
+    pin_memory: true
+    num_workers_limit: 2      # Safe for 4GB system
+    
+  # Cache optimization
+  cache:
+    enabled: true
+    cache_dir: "data/cache"
+    max_cache_size_gb: 2      # Limit cache size

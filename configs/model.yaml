@@ -1,28 +1,62 @@
-# Fixed Model configuration for U-Net fire segmentation
+# Optimized Model Configuration - Target: F1 96%+, IoU 92%+
 model:
   name: "unet"
   
-  # U-Net architecture - simplified and fixed
+  # U-Net architecture - optimized for fire detection
   architecture: "unet"
-  backbone: "resnet34"
+  backbone: "resnet34"    # Lighter than resnet50, fits 4GB GPU better
   pretrained: true
   in_channels: 3
   num_classes: 1
   
-  # Fixed decoder configuration - 4 blocks to match encoder
-  decoder_channels: [256, 128, 64, 32]  # Removed the 5th channel
-  dropout: 0.1  # Added moderate dropout
-  aux_outputs: true  # Keep auxiliary outputs for deep supervision
+  # Optimized decoder configuration
+  decoder_channels: [256, 128, 64, 32]
+  dropout: 0.15           # Increased from 0.1 for better generalization
+  aux_outputs: true       # Keep deep supervision
   
+  # Attention mechanism for better feature focus
+  attention:
+    enabled: true
+    type: "scse"          # Spatial and channel squeeze & excitation
+    reduction: 16
+    
   # Model dimensions
   input_size: [512, 512]
   
-  # Inference parameters
+  # Feature fusion improvements
+  feature_fusion:
+    enabled: true
+    method: "add"         # Add skip connections instead of concat
+    
+  # Inference parameters - optimized for performance
   inference:
     tile_size: 512
-    tile_overlap: 64
-    batch_size: 4  # Reduced for stability
-    tta: false
+    tile_overlap: 96      # Increased from 64 for better stitching
+    batch_size: 4         # Safe for 4GB GPU
+    tta: true            # Enable test-time augmentation
+    tta_merge: "mean"    # Average TTA predictions
+    
+  # Activation optimization
+  activation:
+    decoder: "relu"       # Standard ReLU
+    final: "sigmoid"      # Binary segmentation
+    
+  # Normalization
+  normalization:
+    type: "batch"         # BatchNorm for stability
+    momentum: 0.1
+    eps: 1e-5
+    
+  # Skip connection improvements
+  skip_connections:
+    type: "residual"      # Residual connections
+    attention: true       # Add attention to skip connections
+    
+  # Output head optimization
+  output_head:
+    intermediate_channels: 16  # Small bottleneck before final conv
+    use_dropout: true
+    dropout_rate: 0.1
     
   # Phase 2 preparation (ConvLSTM) - unchanged
   future:

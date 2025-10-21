@@ -1,115 +1,156 @@
-# Fixed Training configuration - Conservative settings to prevent overfitting
-epochs: 50 
-batch_size: 8  # Reduced from 16 for stability
-num_workers: 2  # Reduced from 4 to prevent data loader issues
+# Optimized Training Configuration - Target: F1 96%+, IoU 92%+
+# Memory-efficient settings for GTX 1650 (4GB)
+epochs: 60  # Increased for better convergence
+batch_size: 6  # Reduced for 4GB GPU - allows larger gradients accumulation
+num_workers: 2  # Safe for 4GB memory
 pin_memory: true
 seed: 42
 debug_mode: false
 
-# Conservative optimizer settings
+# Gradient accumulation to simulate larger batch size
+gradient_accumulation_steps: 3  # Effective batch size: 6 * 3 = 18
+
+# Optimized optimizer settings - balanced for convergence
 optimizer:
-  type: "adamw"  # Changed from adam to adamw for better regularization
-  learning_rate: 3e-5  # Significantly reduced from 1e-4
-  weight_decay: 1e-5   # Reduced weight decay
+  type: "adamw"
+  learning_rate: 8e-5  # Increased from 3e-5 for faster convergence
+  weight_decay: 5e-6   # Reduced for less regularization
   betas: [0.9, 0.999]
+  eps: 1e-8
 
-# Learning rate scheduler
+# Improved learning rate scheduler with warmup
 scheduler:
-  type: "cosine"
-  T_max: 50  # Match epochs
-  eta_min: 1e-7  # Lower minimum
-
-  # fallback params
-  step_size: 15  # Reduced step size
-  gamma: 0.5     # Less aggressive decay
-
-  # plateau params
+  type: "cosine_warmup"  # Warmup + cosine annealing
+  warmup_epochs: 5       # Gradual warmup
+  T_max: 60              # Match epochs
+  eta_min: 5e-7          # Lower minimum for fine-tuning
+  
+  # Fallback params (if warmup not available)
+  step_size: 20
+  gamma: 0.5
+  
+  # Plateau params
   mode: "max"
-  patience: 7    # Reduced patience
-  factor: 0.7    # Less aggressive reduction
-  threshold: 0.001
+  patience: 8
+  factor: 0.6
+  threshold: 0.0005
 
-# Balanced loss function - addressing class imbalance
+# Optimized loss function - balanced for F1 improvement
 loss:
   loss_type: "combined"
-  dice_weight: 0.7      # Increased Dice weight for better segmentation
-  focal_weight: 0.3     # Reduced focal weight
-  aux_weight: 0.2       # Reduced auxiliary weight
-  focal_alpha: 0.8      # Higher alpha for rare fire class
-  focal_gamma: 2.5      # Slightly higher gamma for hard examples
+  dice_weight: 0.5        # Balanced Dice for IoU
+  focal_weight: 0.5       # Balanced Focal for precision/recall
+  aux_weight: 0.3         # Deep supervision
+  focal_alpha: 0.75       # Increased focus on fire class (was 0.8)
+  focal_gamma: 2.0        # Standard gamma
   dice_smooth: 1.0
   iou_smooth: 1.0
-  class_weights: [1.0, 8.0]  # Higher weight for fire class
+  class_weights: [1.0, 10.0]  # Higher weight for fire class
   reduction: "mean"
 
-# Conservative data augmentation - reduced intensity
+# Enhanced data augmentation - more aggressive
 augmentation:
   enabled: true
-  probability: 0.6  # Reduced from 0.8
+  probability: 0.85       # Increased from 0.6
   horizontal_flip: 0.5
   vertical_flip: 0.5
-  rotation_90: 0.3      # Reduced from 0.5
-  brightness_contrast: 0.2  # Reduced from 0.3
-  gaussian_noise: 0.1   # Reduced from 0.2
-  cutout: 0.1           # Reduced from 0.2
+  rotation_90: 0.5        # Increased from 0.3
+  random_rotation: 0.4    # Added smooth rotation
+  brightness_contrast: 0.4  # Increased from 0.2
+  gaussian_noise: 0.25    # Increased from 0.1
+  gaussian_blur: 0.2      # Added for robustness
+  cutout: 0.15            # Increased from 0.1
+  color_jitter: 0.3       # Added for color variation
+  elastic_transform: 0.15 # Added for spatial robustness
   
-  # Reduced augmentation limits
-  rotation_limit: 10    # Reduced from 15
-  brightness_limit: 0.15  # Reduced from 0.2
-  contrast_limit: 0.15    # Reduced from 0.2
-  noise_var_limit: [0.0, 0.02]  # Reduced from 0.05
-  cutout_holes: 4       # Reduced from 8
-  cutout_size: 24       # Reduced from 32
+  # Augmentation parameters
+  rotation_limit: 20      # Increased from 10
+  brightness_limit: 0.25  # Increased from 0.15
+  contrast_limit: 0.25    # Increased from 0.15
+  hue_shift_limit: 15     # Added
+  sat_shift_limit: 20     # Added
+  noise_var_limit: [0.0, 0.03]  # Increased from 0.02
+  blur_limit: [3, 5]      # Gaussian blur kernel
+  cutout_holes: 6         # Increased from 4
+  cutout_size: 32         # Increased from 24
+  
+  # Elastic transform params
+  alpha: 120
+  sigma: 12
+  alpha_affine: 12
 
 # Validation and monitoring
 validation_interval: 1
 validation:
   metrics: ["iou", "dice", "precision", "recall", "f1"]
-  threshold: 0.5
+  threshold: 0.45  # Slightly lower threshold for better recall
   early_visualize: true
+  save_best_predictions: true  # Save best validation predictions
 
-# Aggressive early stopping to prevent overfitting
+# Optimized early stopping - less aggressive
 early_stopping:
-  patience: 8           # Reduced from 15
+  patience: 12            # Increased from 8
   monitor: "val_fire_f1"
   mode: "max"
-  min_delta: 0.002      # Increased sensitivity
+  min_delta: 0.001        # Reduced from 0.002
   restore_best_weights: true
 
 # Checkpointing
 checkpoint:
-  save_top_k: 3
+  save_top_k: 5           # Keep more checkpoints
   monitor: "val_fire_f1"
   mode: "max"
   save_last: true
   dirpath: "checkpoints/"
   filename: "unet-{epoch:02d}-{val_fire_f1:.4f}"
+  save_on_train_epoch_end: true
 
-# Logging - more frequent for monitoring
+# Logging - detailed monitoring
 logging:
-  log_every_n_steps: 20  # Reduced from 50 for more monitoring
+  log_every_n_steps: 15
   save_dir: "logs/"
-  name: "fire_detection_fixed"
-  project: "forest_fire_unet_v2"
+  name: "fire_detection_optimized"
+  project: "forest_fire_unet_optimized"
   wandb:
     enabled: false
-    project: "forest-fire-detection-fixed"
+    project: "forest-fire-detection-optimized"
     entity: null
-    tags: ["unet", "fire-segmentation", "fixed-architecture"]
+    tags: ["unet", "fire-segmentation", "optimized", "gtx1650"]
 
-# Precision settings - disabled mixed precision for stability
-precision: 32
-mixed_precision: false
+# Mixed precision for 4GB GPU - but conservative
+precision: 16           # Use FP16 for memory efficiency
+mixed_precision: true   # Enable for 4GB GPU
+amp_level: "O1"         # Conservative AMP level
 
-# Conservative gradient clipping
-gradient_clipping: 0.5  # Reduced from 1.0
+# Gradient management for stability
+gradient_clipping: 1.0  # Standard clipping
+max_grad_norm: 1.0
 
 # Trainer settings
-log_interval: 5         # More frequent logging
+log_interval: 5
 validation_frequency: 1
 validation_interval: 1
-save_interval: 3        # More frequent saves
+save_interval: 5
+
+# Test-time augmentation for inference
+tta:
+  enabled: true
+  transforms: ["hflip", "vflip", "rot90"]
 
 # Misc
 tile_size: 512
 tile_overlap: 64
+
+# Memory optimization for GTX 1650
+memory_optimization:
+  empty_cache_every_n_steps: 50  # Clear cache regularly
+  gradient_checkpointing: false   # Disabled - too slow
+  deterministic: false            # Allow cudnn optimizations
+  benchmark: true                 # Enable cudnn benchmark
+  
+# Post-processing for inference
+post_processing:
+  min_fire_area: 25       # Minimum connected component size
+  morphological_closing: true
+  closing_kernel_size: 3
+  confidence_threshold: 0.45  # Match validation threshold
