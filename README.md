@@ -1,1 +1,1 @@
-# Forest-Fire-Classification-and-Spread-Prediction
+# Forest_Fire_Classification_and_Spread_Prediction
