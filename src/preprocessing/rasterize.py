@@ -122,6 +122,73 @@ class AutoFireDetector:
         """
         return detect_fire_pixels_auto(image, self.config)
     
+    def extract_fire_polygons(self, fire_pixels: List[Tuple[int, int]], 
+                             geo_transformer: GeoTransformer,
+                             min_area: int = None,
+                             simplify_epsilon: float = 2.0) -> List[List[Tuple[float, float]]]:
+        """
+        Extract fire polygons from detected fire pixels.
+        
+        Args:
+            fire_pixels: List of (row, col) fire pixel coordinates
+            geo_transformer: Geo transformer for coordinate conversion
+            min_area: Minimum polygon area in pixels (uses config default if None)
+            simplify_epsilon: Epsilon for polygon simplification (Douglas-Peucker)
+            
+        Returns:
+            List of polygons, where each polygon is a list of (lat, lon) coordinates
+        """
+        if not fire_pixels:
+            return []
+        
+        if min_area is None:
+            min_area = self.config.min_fire_area
+        
+        # Create binary mask from fire pixels
+        mask = np.zeros((geo_transformer.height, geo_transformer.width), dtype=np.uint8)
+        for row, col in fire_pixels:
+            if 0 <= row < geo_transformer.height and 0 <= col < geo_transformer.width:
+                mask[row, col] = 1
+        
+        # Apply morphological closing to connect nearby pixels
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        
+        # Find contours
+        contours, hierarchy = cv2.findContours(
+            mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
+        
+        fire_polygons = []
+        
+        for contour in contours:
+            # Filter by area
+            area = cv2.contourArea(contour)
+            if area < min_area:
+                continue
+            
+            # Simplify contour using Douglas-Peucker algorithm
+            epsilon = simplify_epsilon
+            approx = cv2.approxPolyDP(contour, epsilon, True)
+            
+            # Convert pixel coordinates to lat/lon
+            polygon_latlon = []
+            for point in approx:
+                col, row = point[0]  # OpenCV format is (x, y) = (col, row)
+                try:
+                    lat, lon = geo_transformer.pixel_to_latlon(int(row), int(col))
+                    polygon_latlon.append((float(lat), float(lon)))
+                except Exception as e:
+                    logger.warning(f"Could not convert pixel ({row}, {col}) to lat/lon: {e}")
+                    continue
+            
+            # Only add polygons with at least 3 points
+            if len(polygon_latlon) >= 3:
+                fire_polygons.append(polygon_latlon)
+        
+        logger.info(f"Extracted {len(fire_polygons)} fire polygons from {len(fire_pixels)} pixels")
+        return fire_polygons
+    
     def cluster_fire_pixels(self, fire_pixels: List[Tuple[int, int]]) -> List[List[Tuple[int, int]]]:
         """Group nearby fire pixels into clusters."""
         if not fire_pixels:
@@ -193,26 +260,48 @@ class AutoFireDetector:
     def pixels_to_annotation(self, image_filename: str, state: str, date: datetime,
                            fire_pixels: List[Tuple[int, int]], 
                            geo_transformer: GeoTransformer) -> FireAnnotation:
-        """Convert detected fire pixels to annotation format."""
-        # Convert pixel coordinates to lat/lon
+        """
+        Convert detected fire pixels to annotation format with BOTH points and polygons.
+        
+        Args:
+            image_filename: Name of the image file
+            state: State/region name
+            date: Date of the image
+            fire_pixels: List of (row, col) detected fire pixel coordinates
+            geo_transformer: GeoTransformer for coordinate conversion
+            
+        Returns:
+            FireAnnotation with fire_points and fire_polygons populated
+        """
+        # Convert pixel coordinates to lat/lon points
         fire_points = []
         for row, col in fire_pixels:
             try:
                 lat, lon = geo_transformer.pixel_to_latlon(row, col)
-                fire_points.append((lat, lon))
+                fire_points.append((float(lat), float(lon)))
             except Exception as e:
                 logger.warning(f"Could not convert pixel ({row}, {col}) to lat/lon: {e}")
+        
+        # Extract fire polygons from pixels
+        fire_polygons = self.extract_fire_polygons(
+            fire_pixels, 
+            geo_transformer,
+            min_area=self.config.min_fire_area,
+            simplify_epsilon=2.0
+        )
+        
+        logger.info(f"Created annotation with {len(fire_points)} points and {len(fire_polygons)} polygons")
         
         return FireAnnotation(
             image_filename=image_filename,
             state=state,
             date=date,
             fire_points=fire_points,
-            fire_polygons=[],
+            fire_polygons=fire_polygons,  # Now includes actual polygons!
             annotation_method='auto_optimized',
             annotator=f'auto_detector_r{self.config.red_threshold}_or{self.config.orange_ratio}',
             created_at=datetime.now(),
-            confidence=0.85  # Higher confidence with optimized parameters
+            confidence=0.85
         )
 
 
@@ -289,7 +378,7 @@ class AnnotationManager:
             json.dump(data, f, indent=2)
         
         self._annotations[annotation.image_filename] = annotation
-        logger.info(f"Saved annotation for {annotation.image_filename}")
+        logger.info(f"Saved annotation for {annotation.image_filename} with {len(annotation.fire_polygons)} polygons")
     
     def get_annotation(self, filename: str) -> Optional[FireAnnotation]:
         """Get annotation for a specific image."""

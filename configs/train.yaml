@@ -1,8 +1,8 @@
 # Optimized Training Configuration - Target: F1 96%+, IoU 92%+
 # Memory-efficient settings for GTX 1650 (4GB)
-epochs: 60  # Increased for better convergence
+epochs: 60 
 batch_size: 6  # Reduced for 4GB GPU - allows larger gradients accumulation
-num_workers: 2  # Safe for 4GB memory
+num_workers: 2 
 pin_memory: true
 seed: 42
 debug_mode: false
@@ -13,7 +13,7 @@ gradient_accumulation_steps: 3  # Effective batch size: 6 * 3 = 18
 # Optimized optimizer settings - balanced for convergence
 optimizer:
   type: "adamw"
-  learning_rate: 8e-5  # Increased from 3e-5 for faster convergence
+  learning_rate: 8e-5  
   weight_decay: 5e-6   # Reduced for less regularization
   betas: [0.9, 0.999]
   eps: 1e-8
@@ -141,7 +141,6 @@ tta:
 tile_size: 512
 tile_overlap: 64
 
-# Memory optimization for GTX 1650
 memory_optimization:
   empty_cache_every_n_steps: 50  # Clear cache regularly
   gradient_checkpointing: false   # Disabled - too slow

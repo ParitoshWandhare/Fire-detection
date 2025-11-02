@@ -13,7 +13,7 @@ data:
   
   # Image specifications
   image_format: "png" 
-  original_size: [3800, 3400]
+  original_size: [3800,3400]  # Alberta[2753,1453] , BritishColumbia[2929,3665] , NovaScotia[961,1186] , Ontario[3800,3400] , Quebec[4403,3350] , The NorthWest Territories[4706,3036]
   
   # Coordinate Reference System
   crs: "EPSG:4326"
@@ -29,7 +29,7 @@ data:
   test_ratio: 0.10        # Kept same
   
   # States/regions to process
-  states: ["Ontario", "Quebec", "Alberta", "BritishColumbia"]
+  states: ["Ontario", "Quebec", "Alberta", "BritishColumbia", "NovaScotia", "The NorthWest Territories"]
   
   # Date range
   date_range:
