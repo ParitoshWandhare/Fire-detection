@@ -147,7 +147,11 @@ class GeoTIFFReader:
     def _get_image_path(self, filename: str, state: str) -> Path:
         """Construct full path to image file."""
         # Handle different filename patterns
+<<<<<<< HEAD
         if not filename.endswith(('.png', '.jpg', '.tif', '.tiff')):
+=======
+        if not filename.endswith(('.png', '.tif', '.tiff')):
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
             filename += '.png'
         
         # Try different path patterns

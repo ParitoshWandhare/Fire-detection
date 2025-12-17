@@ -122,6 +122,7 @@ class AutoFireDetector:
         """
         return detect_fire_pixels_auto(image, self.config)
     
+<<<<<<< HEAD
     def extract_fire_polygons(self, fire_pixels: List[Tuple[int, int]], 
                              geo_transformer: GeoTransformer,
                              min_area: int = None,
@@ -189,6 +190,8 @@ class AutoFireDetector:
         logger.info(f"Extracted {len(fire_polygons)} fire polygons from {len(fire_pixels)} pixels")
         return fire_polygons
     
+=======
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
     def cluster_fire_pixels(self, fire_pixels: List[Tuple[int, int]]) -> List[List[Tuple[int, int]]]:
         """Group nearby fire pixels into clusters."""
         if not fire_pixels:
@@ -260,6 +263,7 @@ class AutoFireDetector:
     def pixels_to_annotation(self, image_filename: str, state: str, date: datetime,
                            fire_pixels: List[Tuple[int, int]], 
                            geo_transformer: GeoTransformer) -> FireAnnotation:
+<<<<<<< HEAD
         """
         Convert detected fire pixels to annotation format with BOTH points and polygons.
         
@@ -274,10 +278,15 @@ class AutoFireDetector:
             FireAnnotation with fire_points and fire_polygons populated
         """
         # Convert pixel coordinates to lat/lon points
+=======
+        """Convert detected fire pixels to annotation format."""
+        # Convert pixel coordinates to lat/lon
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
         fire_points = []
         for row, col in fire_pixels:
             try:
                 lat, lon = geo_transformer.pixel_to_latlon(row, col)
+<<<<<<< HEAD
                 fire_points.append((float(lat), float(lon)))
             except Exception as e:
                 logger.warning(f"Could not convert pixel ({row}, {col}) to lat/lon: {e}")
@@ -292,16 +301,30 @@ class AutoFireDetector:
         
         logger.info(f"Created annotation with {len(fire_points)} points and {len(fire_polygons)} polygons")
         
+=======
+                fire_points.append((lat, lon))
+            except Exception as e:
+                logger.warning(f"Could not convert pixel ({row}, {col}) to lat/lon: {e}")
+        
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
         return FireAnnotation(
             image_filename=image_filename,
             state=state,
             date=date,
             fire_points=fire_points,
+<<<<<<< HEAD
             fire_polygons=fire_polygons,  # Now includes actual polygons!
             annotation_method='auto_optimized',
             annotator=f'auto_detector_r{self.config.red_threshold}_or{self.config.orange_ratio}',
             created_at=datetime.now(),
             confidence=0.85
+=======
+            fire_polygons=[],
+            annotation_method='auto_optimized',
+            annotator=f'auto_detector_r{self.config.red_threshold}_or{self.config.orange_ratio}',
+            created_at=datetime.now(),
+            confidence=0.85  # Higher confidence with optimized parameters
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
         )
 
 
@@ -378,7 +401,11 @@ class AnnotationManager:
             json.dump(data, f, indent=2)
         
         self._annotations[annotation.image_filename] = annotation
+<<<<<<< HEAD
         logger.info(f"Saved annotation for {annotation.image_filename} with {len(annotation.fire_polygons)} polygons")
+=======
+        logger.info(f"Saved annotation for {annotation.image_filename}")
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
     
     def get_annotation(self, filename: str) -> Optional[FireAnnotation]:
         """Get annotation for a specific image."""

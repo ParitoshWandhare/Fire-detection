@@ -1,12 +1,20 @@
+<<<<<<< HEAD
 # Optimized Training Configuration - Target: F1 96%+, IoU 92%+
 # Memory-efficient settings for GTX 1650 (4GB)
 epochs: 60 
 batch_size: 6  # Reduced for 4GB GPU - allows larger gradients accumulation
 num_workers: 2 
+=======
+# Fixed Training configuration - Conservative settings to prevent overfitting
+epochs: 50  # Reduced from 60 for initial testing
+batch_size: 8  # Reduced from 16 for stability
+num_workers: 2  # Reduced from 4 to prevent data loader issues
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
 pin_memory: true
 seed: 42
 debug_mode: false
 
+<<<<<<< HEAD
 # Gradient accumulation to simulate larger batch size
 gradient_accumulation_steps: 3  # Effective batch size: 6 * 3 = 18
 
@@ -78,11 +86,68 @@ augmentation:
   alpha: 120
   sigma: 12
   alpha_affine: 12
+=======
+# Conservative optimizer settings
+optimizer:
+  type: "adamw"  # Changed from adam to adamw for better regularization
+  learning_rate: 3e-5  # Significantly reduced from 1e-4
+  weight_decay: 1e-5   # Reduced weight decay
+  betas: [0.9, 0.999]
+
+# Learning rate scheduler
+scheduler:
+  type: "cosine"
+  T_max: 50  # Match epochs
+  eta_min: 1e-7  # Lower minimum
+
+  # fallback params
+  step_size: 15  # Reduced step size
+  gamma: 0.5     # Less aggressive decay
+
+  # plateau params
+  mode: "max"
+  patience: 7    # Reduced patience
+  factor: 0.7    # Less aggressive reduction
+  threshold: 0.001
+
+# Balanced loss function - addressing class imbalance
+loss:
+  loss_type: "combined"
+  dice_weight: 0.7      # Increased Dice weight for better segmentation
+  focal_weight: 0.3     # Reduced focal weight
+  aux_weight: 0.2       # Reduced auxiliary weight
+  focal_alpha: 0.8      # Higher alpha for rare fire class
+  focal_gamma: 2.5      # Slightly higher gamma for hard examples
+  dice_smooth: 1.0
+  iou_smooth: 1.0
+  class_weights: [1.0, 8.0]  # Higher weight for fire class
+  reduction: "mean"
+
+# Conservative data augmentation - reduced intensity
+augmentation:
+  enabled: true
+  probability: 0.6  # Reduced from 0.8
+  horizontal_flip: 0.5
+  vertical_flip: 0.5
+  rotation_90: 0.3      # Reduced from 0.5
+  brightness_contrast: 0.2  # Reduced from 0.3
+  gaussian_noise: 0.1   # Reduced from 0.2
+  cutout: 0.1           # Reduced from 0.2
+  
+  # Reduced augmentation limits
+  rotation_limit: 10    # Reduced from 15
+  brightness_limit: 0.15  # Reduced from 0.2
+  contrast_limit: 0.15    # Reduced from 0.2
+  noise_var_limit: [0.0, 0.02]  # Reduced from 0.05
+  cutout_holes: 4       # Reduced from 8
+  cutout_size: 24       # Reduced from 32
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
 
 # Validation and monitoring
 validation_interval: 1
 validation:
   metrics: ["iou", "dice", "precision", "recall", "f1"]
+<<<<<<< HEAD
   threshold: 0.45  # Slightly lower threshold for better recall
   early_visualize: true
   save_best_predictions: true  # Save best validation predictions
@@ -93,16 +158,32 @@ early_stopping:
   monitor: "val_fire_f1"
   mode: "max"
   min_delta: 0.001        # Reduced from 0.002
+=======
+  threshold: 0.5
+  early_visualize: true
+
+# Aggressive early stopping to prevent overfitting
+early_stopping:
+  patience: 8           # Reduced from 15
+  monitor: "val_fire_f1"
+  mode: "max"
+  min_delta: 0.002      # Increased sensitivity
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
   restore_best_weights: true
 
 # Checkpointing
 checkpoint:
+<<<<<<< HEAD
   save_top_k: 5           # Keep more checkpoints
+=======
+  save_top_k: 3
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
   monitor: "val_fire_f1"
   mode: "max"
   save_last: true
   dirpath: "checkpoints/"
   filename: "unet-{epoch:02d}-{val_fire_f1:.4f}"
+<<<<<<< HEAD
   save_on_train_epoch_end: true
 
 # Logging - detailed monitoring
@@ -153,3 +234,34 @@ post_processing:
   morphological_closing: true
   closing_kernel_size: 3
   confidence_threshold: 0.45  # Match validation threshold
+=======
+
+# Logging - more frequent for monitoring
+logging:
+  log_every_n_steps: 20  # Reduced from 50 for more monitoring
+  save_dir: "logs/"
+  name: "fire_detection_fixed"
+  project: "forest_fire_unet_v2"
+  wandb:
+    enabled: false
+    project: "forest-fire-detection-fixed"
+    entity: null
+    tags: ["unet", "fire-segmentation", "fixed-architecture"]
+
+# Precision settings - disabled mixed precision for stability
+precision: 32
+mixed_precision: false
+
+# Conservative gradient clipping
+gradient_clipping: 0.5  # Reduced from 1.0
+
+# Trainer settings
+log_interval: 5         # More frequent logging
+validation_frequency: 1
+validation_interval: 1
+save_interval: 3        # More frequent saves
+
+# Misc
+tile_size: 512
+tile_overlap: 64
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2

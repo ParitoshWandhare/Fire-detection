@@ -395,6 +395,7 @@ class FireSegmentationDataset(FireDetectionDataset):
 def get_transforms(phase: str = 'train', image_size: int = 512,
                    augmentation_config: Optional[Dict] = None) -> A.Compose:
     """
+<<<<<<< HEAD
     Enhanced data augmentation transforms - optimized for fire detection.
     
     Args:
@@ -408,6 +409,16 @@ def get_transforms(phase: str = 'train', image_size: int = 512,
     
     def base_pipeline():
         """Base transforms for validation/test."""
+=======
+    Get data augmentation transforms for different phases.
+
+    This implementation is defensive about albumentations API differences:
+    - Tries GaussNoise then GaussianNoise, with var_limit if available
+    - Tries CoarseDropout with detailed params, falls back to simple call
+    """
+    # default simple transforms for val/test or when augmentation disabled
+    def base_pipeline():
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
         return A.Compose([
             A.Resize(image_size, image_size),
             A.Normalize(
@@ -416,6 +427,7 @@ def get_transforms(phase: str = 'train', image_size: int = 512,
             ),
             ToTensorV2()
         ])
+<<<<<<< HEAD
     
     if phase != 'train' or not augmentation_config or not augmentation_config.get('enabled', True):
         return base_pipeline()
@@ -639,6 +651,117 @@ def get_transforms(phase: str = 'train', image_size: int = 512,
     ])
     
     return A.Compose(aug_list)
+=======
+
+    if phase == 'train' and augmentation_config and augmentation_config.get('enabled', True):
+        # safe extraction of augmentation parameters
+        h_flip_p = augmentation_config.get('horizontal_flip', 0.5)
+        v_flip_p = augmentation_config.get('vertical_flip', 0.5)
+        rot90_p = augmentation_config.get('rotation_90', 0.5)
+        brightness_contrast_p = augmentation_config.get('brightness_contrast', 0.3)
+        noise_p = augmentation_config.get('gaussian_noise', 0.2)
+        cutout_p = augmentation_config.get('cutout', 0.2)
+
+        brightness_limit = min(augmentation_config.get('brightness_limit', 0.2), 0.3)
+        contrast_limit = min(augmentation_config.get('contrast_limit', 0.2), 0.3)
+        noise_var_limit = augmentation_config.get('noise_var_limit', [0.0, 0.02])
+        cutout_holes = min(augmentation_config.get('cutout_holes', 8), 16)
+        cutout_size = min(augmentation_config.get('cutout_size', 32), 64)
+
+        # Build noise transform robustly (try a few options)
+        gauss_transform = None
+        gauss_err = None
+        try:
+            # preferred: GaussNoise(var_limit=..., p=1.0)
+            gauss_transform = A.GaussNoise(var_limit=tuple(noise_var_limit), p=1.0)
+        except Exception as e:
+            gauss_err = e
+            try:
+                # alternative name
+                gauss_transform = A.GaussianNoise(var_limit=tuple(noise_var_limit), p=1.0)
+            except Exception:
+                # fallback: use GaussNoise without var_limit (if available), else skip
+                if hasattr(A, 'GaussNoise'):
+                    try:
+                        gauss_transform = A.GaussNoise(p=1.0)
+                    except Exception:
+                        gauss_transform = None
+                elif hasattr(A, 'GaussianNoise'):
+                    try:
+                        gauss_transform = A.GaussianNoise(p=1.0)
+                    except Exception:
+                        gauss_transform = None
+                else:
+                    gauss_transform = None
+
+        if gauss_transform is None:
+            # If noise transform can't be constructed, log a warning and fall back to multiplicative noise only
+            warnings.warn(f"Gauss/Gaussian noise could not be constructed (error: {gauss_err}). Falling back to MultiplicativeNoise.")
+
+        # Build coarse dropout robustly
+        dropout_transform = None
+        dropout_err = None
+        try:
+            dropout_transform = A.CoarseDropout(
+                max_holes=cutout_holes,
+                max_height=cutout_size,
+                max_width=cutout_size,
+                min_holes=1,
+                min_height=8,
+                min_width=8,
+                fill_value=0,
+                p=cutout_p
+            )
+        except Exception as e:
+            dropout_err = e
+            try:
+                # Fallback to minimal argument set
+                dropout_transform = A.CoarseDropout(max_holes=cutout_holes, max_height=cutout_size, max_width=cutout_size, p=cutout_p)
+            except Exception:
+                # final fallback: single-arg constructor
+                try:
+                    dropout_transform = A.CoarseDropout(p=cutout_p)
+                except Exception:
+                    dropout_transform = None
+
+        if dropout_transform is None:
+            warnings.warn(f"CoarseDropout could not be constructed cleanly (error: {dropout_err}). Skipping cutout augmentation.")
+
+        # Compose augmentation list
+        aug_list = [
+            A.Resize(image_size, image_size),
+            A.HorizontalFlip(p=h_flip_p),
+            A.VerticalFlip(p=v_flip_p),
+            A.RandomRotate90(p=rot90_p),
+            A.OneOf([
+                A.RandomBrightnessContrast(brightness_limit=brightness_limit, contrast_limit=contrast_limit, p=1.0),
+                A.HueSaturationValue(hue_shift_limit=10, sat_shift_limit=15, val_shift_limit=10, p=1.0),
+                A.CLAHE(p=1.0),
+            ], p=brightness_contrast_p),
+        ]
+
+        # include noise if available, else multiplicative noise (safe)
+        if gauss_transform is not None:
+            aug_list.append(A.OneOf([gauss_transform, A.MultiplicativeNoise(multiplier=[0.95, 1.05], p=1.0)], p=noise_p))
+        else:
+            aug_list.append(A.OneOf([A.MultiplicativeNoise(multiplier=[0.95, 1.05], p=1.0)], p=noise_p))
+
+        # include dropout if available
+        if dropout_transform is not None:
+            aug_list.append(dropout_transform)
+
+        # normalization + tensor
+        aug_list.extend([
+            A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ToTensorV2()
+        ])
+
+        return A.Compose(aug_list)
+
+    else:
+        # val/test or augmentation disabled
+        return base_pipeline()
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
 
 
 class FireDataModule:
@@ -917,6 +1040,7 @@ def create_dataloader_from_config(config: Dict) -> Tuple[DataLoader, DataLoader,
 
 # Example usage and testing
 if __name__ == "__main__":
+<<<<<<< HEAD
     import numpy as np
     
     print("Testing optimized augmentation pipeline")
@@ -966,3 +1090,45 @@ if __name__ == "__main__":
         print(f"   Mask dtype: {result['mask'].dtype}")
     except Exception as e:
         print(f"❌ Transform failed: {e}")
+=======
+    print("Testing Fire Detection Dataset with Data Validation")
+    print("=" * 55)
+
+    # Test dataset creation
+    tiles_dir = "data/interim/tiles"
+
+    try:
+        # Create data module
+        data_module = FireDataModule(
+            tiles_dir=tiles_dir,
+            batch_size=8,
+            num_workers=2,
+            task='segmentation'
+        )
+
+        # Print statistics
+        print("Class distribution:")
+        print(json.dumps(data_module.get_class_distribution(), indent=2))
+
+        # Get dataloaders
+        train_loader = data_module.train_dataloader()
+        val_loader = data_module.val_dataloader()
+        test_loader = data_module.test_dataloader()
+
+        # Inspect one batch
+        print("\nInspecting one batch from train loader...")
+        for batch_idx, (images, masks) in enumerate(train_loader):
+            print(f"Batch {batch_idx}:")
+            print(f"  Images shape: {images.shape}")
+            print(f"  Masks shape: {masks.shape}")
+            print(f"  Image dtype: {images.dtype}, Mask dtype: {masks.dtype}")
+            if batch_idx == 0:
+                break
+
+        print("\nValidation loader size:", len(val_loader))
+        print("Test loader size:", len(test_loader))
+        print("✅ Dataset and dataloaders created successfully.")
+
+    except Exception as e:
+        print(f"❌ Error while testing dataset: {e}")
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2

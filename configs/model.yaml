@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Optimized Model Configuration - Target: F1 96%+, IoU 92%+
 model:
   name: "unet"
@@ -5,10 +6,20 @@ model:
   # U-Net architecture - optimized for fire detection
   architecture: "unet"
   backbone: "resnet34"    # Lighter than resnet50, fits 4GB GPU better
+=======
+# Fixed Model configuration for U-Net fire segmentation
+model:
+  name: "unet"
+  
+  # U-Net architecture - simplified and fixed
+  architecture: "unet"
+  backbone: "resnet34"
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
   pretrained: true
   in_channels: 3
   num_classes: 1
   
+<<<<<<< HEAD
   # Optimized decoder configuration
   decoder_channels: [256, 128, 64, 32]
   dropout: 0.15           # Increased from 0.1 for better generalization
@@ -57,6 +68,22 @@ model:
     intermediate_channels: 16  # Small bottleneck before final conv
     use_dropout: true
     dropout_rate: 0.1
+=======
+  # Fixed decoder configuration - 4 blocks to match encoder
+  decoder_channels: [256, 128, 64, 32]  # Removed the 5th channel
+  dropout: 0.1  # Added moderate dropout
+  aux_outputs: true  # Keep auxiliary outputs for deep supervision
+  
+  # Model dimensions
+  input_size: [512, 512]
+  
+  # Inference parameters
+  inference:
+    tile_size: 512
+    tile_overlap: 64
+    batch_size: 4  # Reduced for stability
+    tta: false
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
     
   # Phase 2 preparation (ConvLSTM) - unchanged
   future:

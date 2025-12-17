@@ -4177,6 +4177,7 @@
 2025-09-15 11:58:07,105 - __main__ - INFO - No-fire tiles: 5869
 2025-09-15 11:58:07,105 - __main__ - INFO - Fire ratio: 0.127
 2025-09-15 11:58:07,105 - __main__ - INFO - Data preparation completed successfully!
+<<<<<<< HEAD
 2025-10-08 18:48:38,662 - __main__ - INFO - Starting data preparation
 2025-10-08 18:48:38,663 - __main__ - INFO - Configuration: configs/train.yaml
 2025-10-08 18:48:38,664 - __main__ - INFO - Data config: congifs/data.yaml
@@ -7729,3 +7730,5 @@
 2025-11-06 10:25:27,544 - __main__ - INFO - No-fire tiles: 10675
 2025-11-06 10:25:27,544 - __main__ - INFO - Fire ratio: 0.169
 2025-11-06 10:25:27,545 - __main__ - INFO - Data preparation completed successfully!
+=======
+>>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
