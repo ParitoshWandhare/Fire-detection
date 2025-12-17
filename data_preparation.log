@@ -7577,3 +7577,155 @@
 2025-11-02 17:53:49,231 - __main__ - INFO - No-fire tiles: 9024
 2025-11-02 17:53:49,231 - __main__ - INFO - Fire ratio: 0.155
 2025-11-02 17:53:49,231 - __main__ - INFO - Data preparation completed successfully!
+2025-11-06 10:23:56,711 - __main__ - INFO - Starting data preparation
+2025-11-06 10:23:56,713 - __main__ - INFO - Configuration: configs/train.yaml
+2025-11-06 10:23:56,714 - __main__ - INFO - Data config: configs/data.yaml
+2025-11-06 10:23:56,953 - data_io.readers - INFO - Loaded metadata for 180 images
+2025-11-06 10:23:56,954 - __main__ - INFO - Initialized data readers
+2025-11-06 10:23:56,965 - __main__ - INFO - Found 30 images to process
+2025-11-06 10:24:01,271 - data_io.geo - INFO - Fire Detection Config loaded:
+2025-11-06 10:24:01,271 - data_io.geo - INFO -   Red threshold: 110
+2025-11-06 10:24:01,272 - data_io.geo - INFO -   Orange ratio: 0.55
+2025-11-06 10:24:01,272 - data_io.geo - INFO -   Brightness threshold: 190
+2025-11-06 10:24:01,272 - data_io.geo - INFO -   Green max: 170
+2025-11-06 10:24:01,273 - data_io.geo - INFO -   Blue max: 150
+2025-11-06 10:24:01,273 - data_io.geo - INFO -   Min fire area: 1
+2025-11-06 10:24:01,273 - data_io.geo - INFO -   Noise removal: True
+2025-11-06 10:24:01,274 - preprocessing.rasterize - INFO - AutoFireDetector initialized with parameters:
+2025-11-06 10:24:01,274 - preprocessing.rasterize - INFO -   Red threshold: 110
+2025-11-06 10:24:01,275 - preprocessing.rasterize - INFO -   Orange ratio: 0.55
+2025-11-06 10:24:01,275 - preprocessing.rasterize - INFO -   Brightness threshold: 190
+2025-11-06 10:24:01,276 - preprocessing.rasterize - INFO -   Green max: 170
+2025-11-06 10:24:01,276 - preprocessing.rasterize - INFO -   Blue max: 150
+2025-11-06 10:24:01,276 - preprocessing.rasterize - INFO -   Min fire area: 1
+2025-11-06 10:24:01,277 - __main__ - INFO - Starting fire detection and annotation...
+2025-11-06 10:24:01,309 - __main__ - INFO - Annotation already exists for Ontario-2023-06-01, skipping
+2025-11-06 10:24:01,310 - __main__ - INFO - Annotation already exists for Ontario-2023-06-02, skipping
+2025-11-06 10:24:01,310 - __main__ - INFO - Annotation already exists for Ontario-2023-06-03, skipping
+2025-11-06 10:24:01,310 - __main__ - INFO - Annotation already exists for Ontario-2023-06-04, skipping
+2025-11-06 10:24:01,311 - __main__ - INFO - Annotation already exists for Ontario-2023-06-05, skipping
+2025-11-06 10:24:01,311 - __main__ - INFO - Annotation already exists for Ontario-2023-06-06, skipping
+2025-11-06 10:24:01,312 - __main__ - INFO - Annotation already exists for Ontario-2023-06-07, skipping
+2025-11-06 10:24:01,312 - __main__ - INFO - Annotation already exists for Ontario-2023-06-08, skipping
+2025-11-06 10:24:01,313 - __main__ - INFO - Annotation already exists for Ontario-2023-06-09, skipping
+2025-11-06 10:24:01,313 - __main__ - INFO - Annotation already exists for Ontario-2023-06-10, skipping
+2025-11-06 10:24:01,314 - __main__ - INFO - Annotation already exists for Ontario-2023-06-11, skipping
+2025-11-06 10:24:01,315 - __main__ - INFO - Annotation already exists for Ontario-2023-06-12, skipping
+2025-11-06 10:24:01,315 - __main__ - INFO - Annotation already exists for Ontario-2023-06-13, skipping
+2025-11-06 10:24:01,316 - __main__ - INFO - Annotation already exists for Ontario-2023-06-14, skipping
+2025-11-06 10:24:01,316 - __main__ - INFO - Annotation already exists for Ontario-2023-06-15, skipping
+2025-11-06 10:24:01,317 - __main__ - INFO - Annotation already exists for Ontario-2023-06-16, skipping
+2025-11-06 10:24:01,317 - __main__ - INFO - Annotation already exists for Ontario-2023-06-17, skipping
+2025-11-06 10:24:01,318 - __main__ - INFO - Annotation already exists for Ontario-2023-06-18, skipping
+2025-11-06 10:24:01,319 - __main__ - INFO - Annotation already exists for Ontario-2023-06-19, skipping
+2025-11-06 10:24:01,319 - __main__ - INFO - Annotation already exists for Ontario-2023-06-20, skipping
+2025-11-06 10:24:01,320 - __main__ - INFO - Annotation already exists for Ontario-2023-06-21, skipping
+2025-11-06 10:24:01,320 - __main__ - INFO - Annotation already exists for Ontario-2023-06-22, skipping
+2025-11-06 10:24:01,321 - __main__ - INFO - Annotation already exists for Ontario-2023-06-23, skipping
+2025-11-06 10:24:01,321 - __main__ - INFO - Annotation already exists for Ontario-2023-06-24, skipping
+2025-11-06 10:24:01,322 - __main__ - INFO - Annotation already exists for Ontario-2023-06-25, skipping
+2025-11-06 10:24:01,322 - __main__ - INFO - Annotation already exists for Ontario-2023-06-26, skipping
+2025-11-06 10:24:01,323 - __main__ - INFO - Annotation already exists for Ontario-2023-06-27, skipping
+2025-11-06 10:24:01,323 - __main__ - INFO - Annotation already exists for Ontario-2023-06-28, skipping
+2025-11-06 10:24:01,324 - __main__ - INFO - Annotation already exists for Ontario-2023-06-29, skipping
+2025-11-06 10:24:01,325 - __main__ - INFO - Annotation already exists for Ontario-2023-06-30, skipping
+2025-11-06 10:24:01,327 - __main__ - INFO - Successfully processed 30/30 images
+2025-11-06 10:24:01,327 - __main__ - INFO - Total annotations: 180
+2025-11-06 10:24:01,328 - __main__ - INFO - Auto annotations: 30
+2025-11-06 10:24:01,329 - __main__ - INFO - Starting tile generation...
+2025-11-06 10:24:02,441 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-01
+2025-11-06 10:24:02,441 - preprocessing.tiling - INFO -   13 tiles contain fire
+2025-11-06 10:24:04,397 - preprocessing.tiling - INFO - Saved 13 image tiles and 13 mask tiles
+2025-11-06 10:24:05,275 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-02
+2025-11-06 10:24:05,277 - preprocessing.tiling - INFO -   20 tiles contain fire
+2025-11-06 10:24:07,194 - preprocessing.tiling - INFO - Saved 20 image tiles and 20 mask tiles
+2025-11-06 10:24:08,095 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-03
+2025-11-06 10:24:08,095 - preprocessing.tiling - INFO -   12 tiles contain fire
+2025-11-06 10:24:09,645 - preprocessing.tiling - INFO - Saved 12 image tiles and 12 mask tiles
+2025-11-06 10:24:10,519 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-04
+2025-11-06 10:24:10,519 - preprocessing.tiling - INFO -   20 tiles contain fire
+2025-11-06 10:24:13,313 - preprocessing.tiling - INFO - Saved 20 image tiles and 20 mask tiles
+2025-11-06 10:24:14,221 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-05
+2025-11-06 10:24:14,221 - preprocessing.tiling - INFO -   21 tiles contain fire
+2025-11-06 10:24:16,088 - preprocessing.tiling - INFO - Saved 21 image tiles and 21 mask tiles
+2025-11-06 10:24:16,964 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-06
+2025-11-06 10:24:16,965 - preprocessing.tiling - INFO -   13 tiles contain fire
+2025-11-06 10:24:18,493 - preprocessing.tiling - INFO - Saved 13 image tiles and 13 mask tiles
+2025-11-06 10:24:19,311 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-07
+2025-11-06 10:24:19,311 - preprocessing.tiling - INFO -   25 tiles contain fire
+2025-11-06 10:24:22,998 - preprocessing.tiling - INFO - Saved 25 image tiles and 25 mask tiles
+2025-11-06 10:24:23,633 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-08
+2025-11-06 10:24:23,634 - preprocessing.tiling - INFO -   20 tiles contain fire
+2025-11-06 10:24:25,563 - preprocessing.tiling - INFO - Saved 20 image tiles and 20 mask tiles
+2025-11-06 10:24:26,132 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-09
+2025-11-06 10:24:26,133 - preprocessing.tiling - INFO -   17 tiles contain fire
+2025-11-06 10:24:28,491 - preprocessing.tiling - INFO - Saved 17 image tiles and 17 mask tiles
+2025-11-06 10:24:29,002 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-10
+2025-11-06 10:24:29,003 - preprocessing.tiling - INFO -   9 tiles contain fire
+2025-11-06 10:24:29,883 - preprocessing.tiling - INFO - Saved 9 image tiles and 9 mask tiles
+2025-11-06 10:24:30,522 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-11
+2025-11-06 10:24:30,522 - preprocessing.tiling - INFO -   16 tiles contain fire
+2025-11-06 10:24:32,561 - preprocessing.tiling - INFO - Saved 16 image tiles and 16 mask tiles
+2025-11-06 10:24:33,377 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-12
+2025-11-06 10:24:33,378 - preprocessing.tiling - INFO -   17 tiles contain fire
+2025-11-06 10:24:35,384 - preprocessing.tiling - INFO - Saved 17 image tiles and 17 mask tiles
+2025-11-06 10:24:36,267 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-13
+2025-11-06 10:24:36,267 - preprocessing.tiling - INFO -   10 tiles contain fire
+2025-11-06 10:24:37,461 - preprocessing.tiling - INFO - Saved 10 image tiles and 10 mask tiles
+2025-11-06 10:24:38,066 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-14
+2025-11-06 10:24:38,067 - preprocessing.tiling - INFO -   8 tiles contain fire
+2025-11-06 10:24:39,286 - preprocessing.tiling - INFO - Saved 8 image tiles and 8 mask tiles
+2025-11-06 10:24:39,784 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-15
+2025-11-06 10:24:39,785 - preprocessing.tiling - INFO -   17 tiles contain fire
+2025-11-06 10:24:41,647 - preprocessing.tiling - INFO - Saved 17 image tiles and 17 mask tiles
+2025-11-06 10:24:42,405 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-16
+2025-11-06 10:24:42,405 - preprocessing.tiling - INFO -   18 tiles contain fire
+2025-11-06 10:24:45,009 - preprocessing.tiling - INFO - Saved 18 image tiles and 18 mask tiles
+2025-11-06 10:24:45,879 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-17
+2025-11-06 10:24:45,879 - preprocessing.tiling - INFO -   22 tiles contain fire
+2025-11-06 10:24:48,990 - preprocessing.tiling - INFO - Saved 22 image tiles and 22 mask tiles
+2025-11-06 10:24:49,564 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-18
+2025-11-06 10:24:49,564 - preprocessing.tiling - INFO -   7 tiles contain fire
+2025-11-06 10:24:50,577 - preprocessing.tiling - INFO - Saved 7 image tiles and 7 mask tiles
+2025-11-06 10:24:51,232 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-19
+2025-11-06 10:24:51,233 - preprocessing.tiling - INFO -   18 tiles contain fire
+2025-11-06 10:24:53,821 - preprocessing.tiling - INFO - Saved 18 image tiles and 18 mask tiles
+2025-11-06 10:24:54,725 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-20
+2025-11-06 10:24:54,726 - preprocessing.tiling - INFO -   21 tiles contain fire
+2025-11-06 10:24:57,399 - preprocessing.tiling - INFO - Saved 21 image tiles and 21 mask tiles
+2025-11-06 10:24:58,349 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-21
+2025-11-06 10:24:58,349 - preprocessing.tiling - INFO -   24 tiles contain fire
+2025-11-06 10:25:01,825 - preprocessing.tiling - INFO - Saved 24 image tiles and 24 mask tiles
+2025-11-06 10:25:03,402 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-22
+2025-11-06 10:25:03,403 - preprocessing.tiling - INFO -   27 tiles contain fire
+2025-11-06 10:25:06,395 - preprocessing.tiling - INFO - Saved 27 image tiles and 27 mask tiles
+2025-11-06 10:25:07,425 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-23
+2025-11-06 10:25:07,425 - preprocessing.tiling - INFO -   15 tiles contain fire
+2025-11-06 10:25:09,308 - preprocessing.tiling - INFO - Saved 15 image tiles and 15 mask tiles
+2025-11-06 10:25:10,428 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-24
+2025-11-06 10:25:10,428 - preprocessing.tiling - INFO -   26 tiles contain fire
+2025-11-06 10:25:14,431 - preprocessing.tiling - INFO - Saved 26 image tiles and 26 mask tiles
+2025-11-06 10:25:15,315 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-25
+2025-11-06 10:25:15,316 - preprocessing.tiling - INFO -   19 tiles contain fire
+2025-11-06 10:25:17,445 - preprocessing.tiling - INFO - Saved 19 image tiles and 19 mask tiles
+2025-11-06 10:25:18,145 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-26
+2025-11-06 10:25:18,145 - preprocessing.tiling - INFO -   11 tiles contain fire
+2025-11-06 10:25:19,218 - preprocessing.tiling - INFO - Saved 11 image tiles and 11 mask tiles
+2025-11-06 10:25:19,858 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-27
+2025-11-06 10:25:19,858 - preprocessing.tiling - INFO -   22 tiles contain fire
+2025-11-06 10:25:21,398 - preprocessing.tiling - INFO - Saved 22 image tiles and 22 mask tiles
+2025-11-06 10:25:22,271 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-28
+2025-11-06 10:25:22,271 - preprocessing.tiling - INFO -   18 tiles contain fire
+2025-11-06 10:25:23,439 - preprocessing.tiling - INFO - Saved 18 image tiles and 18 mask tiles
+2025-11-06 10:25:24,066 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-29
+2025-11-06 10:25:24,066 - preprocessing.tiling - INFO -   13 tiles contain fire
+2025-11-06 10:25:25,051 - preprocessing.tiling - INFO - Saved 13 image tiles and 13 mask tiles
+2025-11-06 10:25:25,546 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-30
+2025-11-06 10:25:25,546 - preprocessing.tiling - INFO -   10 tiles contain fire
+2025-11-06 10:25:26,304 - preprocessing.tiling - INFO - Saved 10 image tiles and 10 mask tiles
+2025-11-06 10:25:27,543 - __main__ - INFO - Tile generation completed
+2025-11-06 10:25:27,544 - __main__ - INFO - Total tiles: 12840
+2025-11-06 10:25:27,544 - __main__ - INFO - Fire tiles: 2165
+2025-11-06 10:25:27,544 - __main__ - INFO - No-fire tiles: 10675
+2025-11-06 10:25:27,544 - __main__ - INFO - Fire ratio: 0.169
+2025-11-06 10:25:27,545 - __main__ - INFO - Data preparation completed successfully!
