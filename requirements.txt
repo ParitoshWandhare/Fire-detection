@@ -1,46 +1,217 @@
-# Core ML/DL
-torch>=2.0.0
-torchvision>=0.15.0
-pytorch-lightning>=2.0.0
-torchmetrics>=1.0.0
+# =============================================================================
+# Forest Fire Detection & Spread Prediction - Requirements
+# =============================================================================
+# Python 3.8+ required
+# Tested on Python 3.9.x and 3.10.x
+# For use with venv (virtual environment)
+# 
+# Installation:
+#   python -m venv venv
+#   source venv/bin/activate  # On Windows: venv\Scripts\activate
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+# =============================================================================
 
-# Computer Vision & Geospatial
-opencv-python>=4.8.0
-rasterio>=1.3.0
-geopandas>=0.13.0
-shapely>=2.0.0
-pyproj>=3.6.0
-scikit-image>=0.21.0
+# -----------------------------------------------------------------------------
+# Core Deep Learning Frameworks
+# -----------------------------------------------------------------------------
+torch>=2.0.0,<2.2.0
+torchvision>=0.15.0,<0.17.0
+pytorch-lightning>=2.0.0,<2.2.0
+torchmetrics>=1.0.0,<1.3.0
 
-# Data Processing
-numpy>=1.24.0
-pandas>=2.0.0
-scipy>=1.11.0
-scikit-learn>=1.3.0
+# -----------------------------------------------------------------------------
+# Computer Vision & Image Processing
+# -----------------------------------------------------------------------------
+opencv-python>=4.8.0,<4.10.0
+opencv-contrib-python>=4.8.0,<4.10.0
+Pillow>=10.0.0,<11.0.0
+scikit-image>=0.21.0,<0.23.0
+albumentations>=1.3.0,<1.5.0
 
+# -----------------------------------------------------------------------------
+# Geospatial Data Processing
+# -----------------------------------------------------------------------------
+rasterio>=1.3.0,<1.4.0
+geopandas>=0.13.0,<0.15.0
+shapely>=2.0.0,<2.1.0
+pyproj>=3.6.0,<3.7.0
+fiona>=1.9.0,<1.10.0
+
+# -----------------------------------------------------------------------------
+# Data Processing & Analysis
+# -----------------------------------------------------------------------------
+numpy>=1.24.0,<1.27.0
+pandas>=2.0.0,<2.2.0
+scipy>=1.11.0,<1.12.0
+scikit-learn>=1.3.0,<1.4.0
+
+# -----------------------------------------------------------------------------
 # Visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
-plotly>=5.15.0
+# -----------------------------------------------------------------------------
+matplotlib>=3.7.0,<3.9.0
+seaborn>=0.12.0,<0.14.0
+plotly>=5.15.0,<5.19.0
 
+# -----------------------------------------------------------------------------
 # Configuration & Logging
-pyyaml>=6.0
-omegaconf>=2.3.0
-wandb>=0.15.0
-tensorboard>=2.13.0
+# -----------------------------------------------------------------------------
+pyyaml>=6.0,<7.0
+omegaconf>=2.3.0,<2.4.0
+tensorboard>=2.13.0,<2.16.0
+tqdm>=4.65.0,<4.67.0
 
-# Image Processing & Augmentation
-albumentations>=1.3.0
-Pillow>=10.0.0
+# -----------------------------------------------------------------------------
+# Optional: Weights & Biases (W&B) for experiment tracking
+# -----------------------------------------------------------------------------
+# wandb>=0.15.0,<0.17.0
 
-# Clustering & Analysis
-dbscan>=0.1.0
-hdbscan>=0.8.0
-
+# -----------------------------------------------------------------------------
 # Utilities
-tqdm>=4.65.0
-jupyter>=1.0.0
-ipykernel>=6.25.0
+# -----------------------------------------------------------------------------
+jupyter>=1.0.0,<1.1.0
+ipykernel>=6.25.0,<6.30.0
+ipywidgets>=8.0.0,<8.2.0
 
-# Optional: CUDA support (uncomment if using GPU)
-# torch-audio>=2.0.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+# -----------------------------------------------------------------------------
+# Testing & Code Quality (Optional - for development)
+# -----------------------------------------------------------------------------
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+black>=23.0.0,<24.0.0
+flake8>=6.0.0,<7.0.0
+mypy>=1.5.0,<1.8.0
+
+# -----------------------------------------------------------------------------
+# Additional Dependencies for Specific Features
+# -----------------------------------------------------------------------------
+
+# For ConvLSTM and advanced temporal modeling
+einops>=0.7.0,<0.8.0
+
+# For efficient data loading
+h5py>=3.9.0,<3.11.0
+
+# For image augmentation (already included via albumentations)
+# imgaug>=0.4.0  # Optional alternative to albumentations
+
+# For memory profiling (optional)
+# memory_profiler>=0.61.0,<0.62.0
+# psutil>=5.9.0,<5.10.0
+
+# For progress bars in notebooks
+# ipywidgets>=8.0.0  # Already included above
+
+# -----------------------------------------------------------------------------
+# CUDA/GPU Support (Uncomment if installing with GPU support)
+# -----------------------------------------------------------------------------
+# For CUDA 11.8 (most common):
+# --extra-index-url https://download.pytorch.org/whl/cu118
+# torch==2.1.0+cu118
+# torchvision==0.16.0+cu118
+
+# For CUDA 12.1:
+# --extra-index-url https://download.pytorch.org/whl/cu121
+# torch==2.1.0+cu121
+# torchvision==0.16.0+cu121
+
+# For CPU only:
+# --extra-index-url https://download.pytorch.org/whl/cpu
+# torch==2.1.0+cpu
+# torchvision==0.16.0+cpu
+
+# =============================================================================
+# Notes:
+# =============================================================================
+# 1. If you encounter issues with rasterio/geopandas on Windows, install them
+#    separately using pre-built wheels:
+#    - Download from: https://www.lfd.uci.edu/~gohlke/pythonlibs/
+#    - pip install <downloaded_wheel>.whl
+#
+# 2. For Apple Silicon (M1/M2 Macs), use:
+#    - conda install pytorch torchvision -c pytorch
+#    - Then install the rest via pip
+#
+# 3. If albumentations installation fails, try:
+#    - pip install albumentations --no-cache-dir
+#
+# 4. For faster training, consider installing:
+#    - pip install torch-optimizer
+#    - pip install timm  # For additional pretrained models
+#
+# 5. Memory issues? Install these for better memory management:
+#    - pip install py-cpuinfo psutil
+#
+# 6. For development and debugging:
+#    - pip install icecream  # Better print debugging
+#    - pip install line_profiler  # Line-by-line profiling
+#
+# =============================================================================
+# Version Compatibility Matrix:
+# =============================================================================
+# Python 3.8:  torch 2.0.x, numpy <1.25
+# Python 3.9:  torch 2.0.x - 2.1.x, numpy <1.27
+# Python 3.10: torch 2.0.x - 2.1.x, numpy <1.27
+# Python 3.11: torch 2.1.x+, numpy >=1.24
+#
+# CUDA 11.8:   Most stable, recommended
+# CUDA 12.1:   Latest, may have compatibility issues
+# CPU only:    Works but slow for training
+# =============================================================================
+
+# =============================================================================
+# Minimal Installation (if full install fails):
+# =============================================================================
+# Run this instead:
+#   pip install torch torchvision numpy pandas matplotlib opencv-python \
+#               pyyaml tqdm scikit-learn pillow albumentations
+#
+# Then add others as needed:
+#   pip install rasterio geopandas  # For geospatial data
+#   pip install pytorch-lightning tensorboard  # For training
+#   pip install jupyter ipykernel  # For notebooks
+# =============================================================================
+
+# =============================================================================
+# Project-Specific Packages (from your codebase analysis):
+# =============================================================================
+# Based on imports found in your codebase:
+
+# From src/data_io/readers.py:
+# - pandas, numpy, rasterio, cv2 (opencv-python)
+
+# From src/data_io/geo.py:
+# - numpy, rasterio, pyproj, cv2, yaml
+
+# From src/preprocessing/rasterize.py:
+# - numpy, cv2, json, pickle, pathlib, logging, dataclasses, datetime
+
+# From src/preprocessing/tiling.py:
+# - numpy, cv2, pathlib, json, logging, itertools
+
+# From src/datasets/fire_dataset.py:
+# - cv2, json, numpy, torch, sklearn, albumentations, warnings
+
+# From src/models/unet.py:
+# - torch, torchvision
+
+# From src/losses/dice_focal.py:
+# - torch, warnings
+
+# From src/train/trainer.py:
+# - torch, numpy, cv2, time, logging, pathlib, json
+
+# From src/train/metrics.py:
+# - numpy, torch, sklearn (optional for ROC)
+
+# From scripts/prepare_data.py:
+# - sys, argparse, logging, pathlib, yaml, datetime, tqdm
+
+# From scripts/trains.py:
+# - argparse, sys, os, yaml, torch, pathlib, warnings, random, numpy
+
+# New for Phase 2 (prepare_sequences.py):
+# - sys, argparse, logging, pathlib, datetime, json, numpy, pandas, cv2, tqdm
+
+# All packages above are included in this requirements.txt
+# =============================================================================
