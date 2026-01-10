@@ -4,12 +4,9 @@ Handles pixel <-> lat/lon conversions and spatial operations.
 """
 
 import numpy as np
-import rasterio
 from rasterio.transform import from_bounds, rowcol, xy
-from rasterio.warp import transform_bounds, reproject, Resampling
 from rasterio.crs import CRS
-import pyproj
-from typing import Tuple, List, Optional, Union, Dict
+from typing import Tuple, List, Optional, Dict
 import logging
 import cv2
 import yaml

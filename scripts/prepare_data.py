@@ -21,7 +21,7 @@ from tqdm import tqdm
 sys.path.append(str(Path(__file__).parent.parent / 'src'))
 
 from data_io.readers import MetadataReader, GeoTIFFReader
-from data_io.geo import GeoTransformer
+from data_io.geo import GeoTransformer 
 from preprocessing.rasterize import (
     AutoFireDetector, AnnotationManager, MaskGenerator,
     FireRasterizer, create_manual_annotation_template

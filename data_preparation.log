@@ -7732,3 +7732,277 @@
 2025-11-06 10:25:27,545 - __main__ - INFO - Data preparation completed successfully!
 =======
 >>>>>>> f28875eaafdd4bd2510d1c05f8e313882794caf2
+2026-01-10 23:10:45,098 - __main__ - INFO - Starting data preparation
+2026-01-10 23:10:45,099 - __main__ - INFO - Configuration: configs/train.yaml
+2026-01-10 23:10:45,099 - __main__ - INFO - Data config: configs/data.yaml
+2026-01-10 23:10:45,188 - data_io.readers - INFO - Loaded metadata for 60 images
+2026-01-10 23:10:45,188 - __main__ - INFO - Initialized data readers
+2026-01-10 23:10:45,199 - __main__ - INFO - Found 30 images to process
+2026-01-10 23:10:48,865 - data_io.geo - INFO - Fire Detection Config loaded:
+2026-01-10 23:10:48,865 - data_io.geo - INFO -   Red threshold: 170
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Orange ratio: 0.7
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Brightness threshold: 300
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Green max: 160
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Blue max: 140
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Min fire area: 2
+2026-01-10 23:10:48,866 - data_io.geo - INFO -   Noise removal: True
+2026-01-10 23:10:48,867 - preprocessing.rasterize - INFO - AutoFireDetector initialized with parameters:
+2026-01-10 23:10:48,867 - preprocessing.rasterize - INFO -   Red threshold: 170
+2026-01-10 23:10:48,867 - preprocessing.rasterize - INFO -   Orange ratio: 0.7
+2026-01-10 23:10:48,867 - preprocessing.rasterize - INFO -   Brightness threshold: 300
+2026-01-10 23:10:48,867 - preprocessing.rasterize - INFO -   Green max: 160
+2026-01-10 23:10:48,868 - preprocessing.rasterize - INFO -   Blue max: 140
+2026-01-10 23:10:48,868 - preprocessing.rasterize - INFO -   Min fire area: 2
+2026-01-10 23:10:48,868 - __main__ - INFO - Starting fire detection and annotation...
+2026-01-10 23:10:48,951 - __main__ - INFO - Processing Ontario-2023-06-01...
+2026-01-10 23:10:49,479 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:10:53,817 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:10:53,826 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-01 with 0 polygons
+2026-01-10 23:10:53,826 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:10:53,833 - __main__ - INFO - Processing Ontario-2023-06-02...
+2026-01-10 23:10:54,791 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:10:55,659 - __main__ - INFO - Detected 296 fire pixels
+2026-01-10 23:10:55,725 - preprocessing.rasterize - INFO - Extracted 8 fire polygons from 296 pixels
+2026-01-10 23:10:55,726 - preprocessing.rasterize - INFO - Created annotation with 296 points and 8 polygons
+2026-01-10 23:10:55,748 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-02 with 8 polygons
+2026-01-10 23:10:55,750 - __main__ - INFO - Saved annotation with 296 fire points
+2026-01-10 23:10:55,756 - __main__ - INFO - Processing Ontario-2023-06-03...
+2026-01-10 23:10:55,970 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:10:56,564 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:00,228 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-03 with 0 polygons
+2026-01-10 23:11:00,228 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:00,233 - __main__ - INFO - Processing Ontario-2023-06-04...
+2026-01-10 23:11:00,267 - rasterio._env - INFO - GDAL signalled an error: err_no=4, msg="`data\\raw\\forest_fire_dataset\\Ontario\\Ontario-2023-06-04.png' not recognized as being in a supported file format."
+2026-01-10 23:11:00,269 - data_io.readers - ERROR - Error reading data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-04.png: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-04.png' not recognized as being in a supported file format.
+2026-01-10 23:11:00,270 - __main__ - ERROR - Error processing Ontario-2023-06-04: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-04.png' not recognized as being in a supported file format.
+2026-01-10 23:11:00,272 - __main__ - INFO - Processing Ontario-2023-06-05...
+2026-01-10 23:11:00,825 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:01,593 - __main__ - INFO - Detected 134 fire pixels
+2026-01-10 23:11:01,624 - preprocessing.rasterize - INFO - Extracted 0 fire polygons from 134 pixels
+2026-01-10 23:11:01,625 - preprocessing.rasterize - INFO - Created annotation with 134 points and 0 polygons
+2026-01-10 23:11:04,847 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-05 with 0 polygons
+2026-01-10 23:11:04,847 - __main__ - INFO - Saved annotation with 134 fire points
+2026-01-10 23:11:04,851 - __main__ - INFO - Processing Ontario-2023-06-06...
+2026-01-10 23:11:05,751 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:06,958 - __main__ - INFO - Detected 844 fire pixels
+2026-01-10 23:11:07,009 - preprocessing.rasterize - INFO - Extracted 15 fire polygons from 844 pixels
+2026-01-10 23:11:07,010 - preprocessing.rasterize - INFO - Created annotation with 844 points and 15 polygons
+2026-01-10 23:11:09,855 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-06 with 15 polygons
+2026-01-10 23:11:09,855 - __main__ - INFO - Saved annotation with 844 fire points
+2026-01-10 23:11:09,859 - __main__ - INFO - Processing Ontario-2023-06-07...
+2026-01-10 23:11:10,072 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:10,555 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:10,565 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-07 with 0 polygons
+2026-01-10 23:11:10,565 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:10,571 - __main__ - INFO - Processing Ontario-2023-06-08...
+2026-01-10 23:11:10,811 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:11,339 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:14,817 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-08 with 0 polygons
+2026-01-10 23:11:14,818 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:14,821 - __main__ - INFO - Processing Ontario-2023-06-09...
+2026-01-10 23:11:15,150 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:15,641 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:15,651 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-09 with 0 polygons
+2026-01-10 23:11:15,651 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:15,654 - __main__ - INFO - Processing Ontario-2023-06-10...
+2026-01-10 23:11:15,837 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:16,341 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:20,007 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-10 with 0 polygons
+2026-01-10 23:11:20,008 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:20,012 - __main__ - INFO - Processing Ontario-2023-06-11...
+2026-01-10 23:11:20,082 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:20,557 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:20,566 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-11 with 0 polygons
+2026-01-10 23:11:20,566 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:20,569 - __main__ - INFO - Processing Ontario-2023-06-12...
+2026-01-10 23:11:20,688 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:21,228 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:24,698 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-12 with 0 polygons
+2026-01-10 23:11:24,699 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:24,703 - __main__ - INFO - Processing Ontario-2023-06-13...
+2026-01-10 23:11:24,778 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:25,230 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:28,785 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-13 with 0 polygons
+2026-01-10 23:11:28,786 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:28,790 - __main__ - INFO - Processing Ontario-2023-06-14...
+2026-01-10 23:11:28,920 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:29,480 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:32,927 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-14 with 0 polygons
+2026-01-10 23:11:32,927 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:32,931 - __main__ - INFO - Processing Ontario-2023-06-15...
+2026-01-10 23:11:33,036 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:33,507 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:37,042 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-15 with 0 polygons
+2026-01-10 23:11:37,042 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:37,049 - __main__ - INFO - Processing Ontario-2023-06-16...
+2026-01-10 23:11:37,182 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:37,691 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:37,701 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-16 with 0 polygons
+2026-01-10 23:11:37,702 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:37,705 - __main__ - INFO - Processing Ontario-2023-06-17...
+2026-01-10 23:11:38,040 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:38,545 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:42,045 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-17 with 0 polygons
+2026-01-10 23:11:42,045 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:42,049 - __main__ - INFO - Processing Ontario-2023-06-18...
+2026-01-10 23:11:42,692 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:43,836 - __main__ - INFO - Detected 328 fire pixels
+2026-01-10 23:11:43,871 - preprocessing.rasterize - INFO - Extracted 0 fire polygons from 328 pixels
+2026-01-10 23:11:43,872 - preprocessing.rasterize - INFO - Created annotation with 328 points and 0 polygons
+2026-01-10 23:11:46,725 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-18 with 0 polygons
+2026-01-10 23:11:46,725 - __main__ - INFO - Saved annotation with 328 fire points
+2026-01-10 23:11:46,729 - __main__ - INFO - Processing Ontario-2023-06-19...
+2026-01-10 23:11:46,768 - rasterio._env - INFO - GDAL signalled an error: err_no=4, msg="`data\\raw\\forest_fire_dataset\\Ontario\\Ontario-2023-06-19.png' not recognized as being in a supported file format."
+2026-01-10 23:11:46,769 - data_io.readers - ERROR - Error reading data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-19.png: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-19.png' not recognized as being in a supported file format.
+2026-01-10 23:11:46,770 - __main__ - ERROR - Error processing Ontario-2023-06-19: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-19.png' not recognized as being in a supported file format.
+2026-01-10 23:11:46,771 - __main__ - INFO - Processing Ontario-2023-06-20...
+2026-01-10 23:11:47,093 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:47,669 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:51,087 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-20 with 0 polygons
+2026-01-10 23:11:51,087 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:51,092 - __main__ - INFO - Processing Ontario-2023-06-21...
+2026-01-10 23:11:52,049 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:53,371 - __main__ - INFO - Detected 1098 fire pixels
+2026-01-10 23:11:53,429 - preprocessing.rasterize - INFO - Extracted 17 fire polygons from 1098 pixels
+2026-01-10 23:11:53,430 - preprocessing.rasterize - INFO - Created annotation with 1098 points and 17 polygons
+2026-01-10 23:11:56,129 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-21 with 17 polygons
+2026-01-10 23:11:56,130 - __main__ - INFO - Saved annotation with 1098 fire points
+2026-01-10 23:11:56,134 - __main__ - INFO - Processing Ontario-2023-06-22...
+2026-01-10 23:11:56,153 - rasterio._env - INFO - GDAL signalled an error: err_no=4, msg="`data\\raw\\forest_fire_dataset\\Ontario\\Ontario-2023-06-22.png' not recognized as being in a supported file format."
+2026-01-10 23:11:56,154 - data_io.readers - ERROR - Error reading data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-22.png: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-22.png' not recognized as being in a supported file format.
+2026-01-10 23:11:56,154 - __main__ - ERROR - Error processing Ontario-2023-06-22: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-22.png' not recognized as being in a supported file format.
+2026-01-10 23:11:56,155 - __main__ - INFO - Processing Ontario-2023-06-23...
+2026-01-10 23:11:56,221 - rasterio._env - INFO - GDAL signalled an error: err_no=4, msg="`data\\raw\\forest_fire_dataset\\Ontario\\Ontario-2023-06-23.png' not recognized as being in a supported file format."
+2026-01-10 23:11:56,223 - data_io.readers - ERROR - Error reading data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-23.png: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-23.png' not recognized as being in a supported file format.
+2026-01-10 23:11:56,223 - __main__ - ERROR - Error processing Ontario-2023-06-23: 'data\raw\forest_fire_dataset\Ontario\Ontario-2023-06-23.png' not recognized as being in a supported file format.
+2026-01-10 23:11:56,224 - __main__ - INFO - Processing Ontario-2023-06-24...
+2026-01-10 23:11:56,394 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:56,913 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:56,922 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-24 with 0 polygons
+2026-01-10 23:11:56,922 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:56,925 - __main__ - INFO - Processing Ontario-2023-06-25...
+2026-01-10 23:11:57,117 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:57,670 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:11:57,680 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-25 with 0 polygons
+2026-01-10 23:11:57,681 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:11:57,687 - __main__ - INFO - Processing Ontario-2023-06-26...
+2026-01-10 23:11:58,497 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:11:59,387 - __main__ - INFO - Detected 624 fire pixels
+2026-01-10 23:11:59,428 - preprocessing.rasterize - INFO - Extracted 10 fire polygons from 624 pixels
+2026-01-10 23:11:59,429 - preprocessing.rasterize - INFO - Created annotation with 624 points and 10 polygons
+2026-01-10 23:12:02,690 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-26 with 10 polygons
+2026-01-10 23:12:02,691 - __main__ - INFO - Saved annotation with 624 fire points
+2026-01-10 23:12:02,695 - __main__ - INFO - Processing Ontario-2023-06-27...
+2026-01-10 23:12:02,827 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:12:03,404 - __main__ - INFO - Detected 0 fire pixels
+2026-01-10 23:12:06,837 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-27 with 0 polygons
+2026-01-10 23:12:06,838 - __main__ - INFO - Saved empty annotation (no fires detected)
+2026-01-10 23:12:06,842 - __main__ - INFO - Processing Ontario-2023-06-28...
+2026-01-10 23:12:07,708 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:12:08,732 - __main__ - INFO - Detected 644 fire pixels
+2026-01-10 23:12:08,772 - preprocessing.rasterize - INFO - Extracted 13 fire polygons from 644 pixels
+2026-01-10 23:12:08,773 - preprocessing.rasterize - INFO - Created annotation with 644 points and 13 polygons
+2026-01-10 23:12:11,740 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-28 with 13 polygons
+2026-01-10 23:12:11,740 - __main__ - INFO - Saved annotation with 644 fire points
+2026-01-10 23:12:11,744 - __main__ - INFO - Processing Ontario-2023-06-29...
+2026-01-10 23:12:12,645 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:12:13,912 - __main__ - INFO - Detected 1006 fire pixels
+2026-01-10 23:12:13,969 - preprocessing.rasterize - INFO - Extracted 13 fire polygons from 1006 pixels
+2026-01-10 23:12:13,970 - preprocessing.rasterize - INFO - Created annotation with 1006 points and 13 polygons
+2026-01-10 23:12:16,777 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-29 with 13 polygons
+2026-01-10 23:12:16,777 - __main__ - INFO - Saved annotation with 1006 fire points
+2026-01-10 23:12:16,782 - __main__ - INFO - Processing Ontario-2023-06-30...
+2026-01-10 23:12:17,875 - __main__ - INFO - Loaded image: (3800, 3400, 3)
+2026-01-10 23:12:18,517 - __main__ - INFO - Detected 71 fire pixels
+2026-01-10 23:12:18,545 - preprocessing.rasterize - INFO - Extracted 0 fire polygons from 71 pixels
+2026-01-10 23:12:18,546 - preprocessing.rasterize - INFO - Created annotation with 71 points and 0 polygons
+2026-01-10 23:12:21,914 - preprocessing.rasterize - INFO - Saved annotation for Ontario-2023-06-30 with 0 polygons
+2026-01-10 23:12:21,915 - __main__ - INFO - Saved annotation with 71 fire points
+2026-01-10 23:12:21,919 - __main__ - INFO - Successfully processed 26/30 images
+2026-01-10 23:12:21,920 - __main__ - INFO - Total annotations: 26
+2026-01-10 23:12:21,920 - __main__ - INFO - Auto annotations: 17
+2026-01-10 23:12:21,920 - __main__ - INFO - Starting tile generation...
+2026-01-10 23:12:21,984 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-01
+2026-01-10 23:12:21,984 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:12:21,985 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:12:22,346 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-02
+2026-01-10 23:12:22,346 - preprocessing.tiling - INFO -   8 tiles contain fire
+2026-01-10 23:12:35,384 - preprocessing.tiling - INFO - Saved 8 image tiles and 8 mask tiles
+2026-01-10 23:12:35,427 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-03
+2026-01-10 23:12:35,427 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:12:35,427 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:12:35,511 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-05
+2026-01-10 23:12:35,512 - preprocessing.tiling - INFO -   12 tiles contain fire
+2026-01-10 23:12:48,855 - preprocessing.tiling - INFO - Saved 12 image tiles and 12 mask tiles
+2026-01-10 23:12:49,235 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-06
+2026-01-10 23:12:49,235 - preprocessing.tiling - INFO -   15 tiles contain fire
+2026-01-10 23:13:10,038 - preprocessing.tiling - INFO - Saved 15 image tiles and 15 mask tiles
+2026-01-10 23:13:10,087 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-07
+2026-01-10 23:13:10,088 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,089 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,125 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-08
+2026-01-10 23:13:10,126 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,126 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,168 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-09
+2026-01-10 23:13:10,168 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,169 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,210 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-10
+2026-01-10 23:13:10,210 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,211 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,237 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-11
+2026-01-10 23:13:10,238 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,238 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,273 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-12
+2026-01-10 23:13:10,273 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,274 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,299 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-13
+2026-01-10 23:13:10,299 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,300 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,333 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-14
+2026-01-10 23:13:10,333 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,334 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,363 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-15
+2026-01-10 23:13:10,364 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,364 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,393 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-16
+2026-01-10 23:13:10,393 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,394 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,430 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-17
+2026-01-10 23:13:10,430 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:10,430 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:10,533 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-18
+2026-01-10 23:13:10,534 - preprocessing.tiling - INFO -   30 tiles contain fire
+2026-01-10 23:13:54,177 - preprocessing.tiling - INFO - Saved 30 image tiles and 30 mask tiles
+2026-01-10 23:13:54,219 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-20
+2026-01-10 23:13:54,219 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:13:54,220 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:13:54,621 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-21
+2026-01-10 23:13:54,621 - preprocessing.tiling - INFO -   12 tiles contain fire
+2026-01-10 23:14:09,878 - preprocessing.tiling - INFO - Saved 12 image tiles and 12 mask tiles
+2026-01-10 23:14:09,919 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-24
+2026-01-10 23:14:13,724 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:14:13,724 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:14:13,791 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-25
+2026-01-10 23:14:13,793 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:14:13,794 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:14:14,160 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-26
+2026-01-10 23:14:14,160 - preprocessing.tiling - INFO -   11 tiles contain fire
+2026-01-10 23:14:21,053 - preprocessing.tiling - INFO - Saved 11 image tiles and 11 mask tiles
+2026-01-10 23:14:21,092 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-27
+2026-01-10 23:14:21,092 - preprocessing.tiling - INFO -   0 tiles contain fire
+2026-01-10 23:14:21,093 - preprocessing.tiling - INFO - Saved 0 image tiles and 0 mask tiles
+2026-01-10 23:14:21,429 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-28
+2026-01-10 23:14:21,430 - preprocessing.tiling - INFO -   15 tiles contain fire
+2026-01-10 23:14:33,473 - preprocessing.tiling - INFO - Saved 15 image tiles and 15 mask tiles
+2026-01-10 23:14:33,856 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-29
+2026-01-10 23:14:33,856 - preprocessing.tiling - INFO -   8 tiles contain fire
+2026-01-10 23:14:46,780 - preprocessing.tiling - INFO - Saved 8 image tiles and 8 mask tiles
+2026-01-10 23:14:47,057 - preprocessing.tiling - INFO - Generated 72 tiles for Ontario-2023-06-30
+2026-01-10 23:14:47,057 - preprocessing.tiling - INFO -   8 tiles contain fire
+2026-01-10 23:14:56,873 - preprocessing.tiling - INFO - Saved 8 image tiles and 8 mask tiles
+2026-01-10 23:14:57,024 - __main__ - INFO - Tile generation completed
+2026-01-10 23:14:57,025 - __main__ - INFO - Total tiles: 1872
+2026-01-10 23:14:57,025 - __main__ - INFO - Fire tiles: 119
+2026-01-10 23:14:57,025 - __main__ - INFO - No-fire tiles: 1753
+2026-01-10 23:14:57,025 - __main__ - INFO - Fire ratio: 0.064
+2026-01-10 23:14:57,025 - __main__ - INFO - Data preparation completed successfully!
